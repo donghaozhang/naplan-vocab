@@ -1,20 +1,18 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NAPLAN Year 3 单词学习</title>
+<title>NAPLAN Year 3 Vocabulary 单词学习</title>
 <style>
 :root{--bg:#f0f4f8;--card:#fff;--primary:#3b82f6;--primary-dark:#2563eb;--success:#22c55e;--danger:#ef4444;--warning:#f59e0b;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--radius:16px}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 
-/* Header */
 .header{background:linear-gradient(135deg,#1e40af 0%,#7c3aed 50%,#db2777 100%);color:#fff;padding:20px;text-align:center}
 .header h1{font-size:1.5rem;font-weight:800}
 .header p{font-size:0.85rem;opacity:0.9;margin-top:4px}
 
-/* Stats bar */
 .stats-bar{display:flex;justify-content:center;gap:16px;padding:12px;background:#fff;border-bottom:1px solid var(--border);flex-wrap:wrap}
 .stat{text-align:center;min-width:70px}
 .stat-num{font-size:1.3rem;font-weight:800;color:var(--primary)}
@@ -22,212 +20,230 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .stat-num.orange{color:var(--warning)}
 .stat-label{font-size:0.7rem;color:var(--muted)}
 
-/* Nav */
-.nav{display:flex;justify-content:center;gap:8px;padding:12px;background:#fff;border-bottom:1px solid var(--border)}
-.nav button{padding:8px 20px;border:2px solid var(--border);border-radius:99px;background:#fff;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all .15s}
+.nav{display:flex;justify-content:center;gap:6px;padding:12px;background:#fff;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.nav button{padding:8px 16px;border:2px solid var(--border);border-radius:99px;background:#fff;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all .15s}
 .nav button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
 .nav button:hover:not(.active){border-color:var(--primary);color:var(--primary)}
 
-/* Main */
 .container{max-width:600px;margin:0 auto;padding:20px}
 
-/* Card */
-.card{background:var(--card);border-radius:var(--radius);padding:32px 24px;box-shadow:0 4px 24px rgba(0,0,0,0.08);text-align:center;margin-bottom:20px}
-.card h2{font-size:1.1rem;color:var(--muted);margin-bottom:8px}
+.card{background:var(--card);border-radius:var(--radius);padding:28px 24px;box-shadow:0 4px 24px rgba(0,0,0,0.08);text-align:center;margin-bottom:20px}
+.card h2{font-size:1rem;color:var(--muted);margin-bottom:4px}
+.card .subtitle{font-size:0.8rem;color:var(--muted);margin-bottom:12px}
 
-/* Spelling mode */
-.word-chinese{font-size:2rem;font-weight:800;margin:16px 0;color:var(--text)}
-.word-hint{font-size:0.9rem;color:var(--muted);margin-bottom:16px}
+.clue-box{background:linear-gradient(135deg,#eff6ff,#f5f3ff);border:2px solid #c7d2fe;border-radius:14px;padding:20px;margin:12px 0}
+.clue-chinese{font-size:1.6rem;font-weight:800;color:var(--text)}
+.clue-english{font-size:1.1rem;color:var(--primary);margin-top:6px;font-style:italic}
+.clue-only-english{font-size:1.3rem;color:var(--primary);font-weight:600}
+
+.letter-hint{font-size:1rem;color:var(--muted);letter-spacing:4px;margin:8px 0;font-family:monospace}
+
 .input-row{display:flex;gap:8px;justify-content:center;margin:16px 0}
-.input-row input{font-size:1.3rem;padding:12px 16px;border:2px solid var(--border);border-radius:12px;width:260px;text-align:center;outline:none;transition:border-color .15s}
+.input-row input{font-size:1.3rem;padding:12px 16px;border:2px solid var(--border);border-radius:12px;width:280px;text-align:center;outline:none;transition:border-color .15s}
 .input-row input:focus{border-color:var(--primary)}
 .input-row input.correct{border-color:var(--success);background:#f0fdf4}
 .input-row input.wrong{border-color:var(--danger);background:#fef2f2}
 
-/* Quiz mode */
-.quiz-word{font-size:2.2rem;font-weight:800;margin:16px 0;color:var(--primary)}
+.quiz-word{font-size:2.2rem;font-weight:800;margin:12px 0;color:var(--primary)}
+.quiz-word-sub{font-size:0.9rem;color:var(--muted);margin-bottom:12px}
+
 .options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
-.option{padding:14px 16px;border:2px solid var(--border);border-radius:12px;background:#fff;font-size:1rem;cursor:pointer;transition:all .15s;text-align:center}
+.option{padding:14px 12px;border:2px solid var(--border);border-radius:12px;background:#fff;font-size:0.95rem;cursor:pointer;transition:all .15s;text-align:center;line-height:1.4}
 .option:hover{border-color:var(--primary);background:var(--primary);color:#fff;transform:scale(1.02)}
+.option .opt-en{font-weight:600}
+.option .opt-cn{font-size:0.8rem;color:var(--muted)}
+.option:hover .opt-cn{color:rgba(255,255,255,0.8)}
 .option.correct{border-color:var(--success);background:#f0fdf4;color:var(--success)}
+.option.correct .opt-cn{color:var(--success)}
 .option.wrong{border-color:var(--danger);background:#fef2f2;color:var(--danger)}
+.option.wrong .opt-cn{color:var(--danger)}
 .option.disabled{pointer-events:none}
 
-/* Feedback */
-.feedback{font-size:1.2rem;font-weight:700;margin:12px 0;min-height:36px}
+/* Word match options - show English words */
+.options-words .option{font-size:1.2rem;font-weight:700;letter-spacing:1px}
+
+.feedback{font-size:1.1rem;font-weight:700;margin:12px 0;min-height:32px}
 .feedback.correct{color:var(--success)}
 .feedback.wrong{color:var(--danger)}
+.feedback .fb-answer{font-size:0.9rem;font-weight:400;margin-top:4px}
 
-/* Buttons */
-.btn{padding:12px 28px;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;transition:all .15s}
+.btn{padding:10px 24px;border:none;border-radius:12px;font-size:0.9rem;font-weight:700;cursor:pointer;transition:all .15s}
 .btn-primary{background:var(--primary);color:#fff}
 .btn-primary:hover{background:var(--primary-dark)}
 .btn-success{background:var(--success);color:#fff}
 .btn-danger{background:var(--danger);color:#fff}
 .btn-outline{background:#fff;border:2px solid var(--border);color:var(--text)}
 .btn-outline:hover{border-color:var(--primary)}
-.btn-small{padding:8px 16px;font-size:0.85rem}
+.btn-small{padding:8px 16px;font-size:0.8rem}
+.btn-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
 
-/* Progress bar */
 .progress-bar{width:100%;height:8px;background:var(--border);border-radius:99px;margin:12px 0;overflow:hidden}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--success));border-radius:99px;transition:width .3s}
 
-/* Word list */
 .word-list{max-height:400px;overflow-y:auto;text-align:left}
-.word-item{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid var(--border);font-size:0.9rem}
-.word-item .eng{font-weight:600}
-.word-item .chn{color:var(--muted)}
-.word-item .badge{font-size:0.7rem;padding:2px 8px;border-radius:99px;font-weight:700}
+.word-item{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid var(--border);font-size:0.85rem;gap:8px}
+.word-item .wi-left{flex:1}
+.word-item .eng{font-weight:700;font-size:0.95rem}
+.word-item .def{color:var(--muted);font-size:0.8rem}
+.word-item .badge{font-size:0.65rem;padding:2px 8px;border-radius:99px;font-weight:700;white-space:nowrap}
 .badge-mastered{background:#dcfce7;color:#16a34a}
 .badge-learning{background:#fef3c7;color:#d97706}
 .badge-new{background:#e0e7ff;color:#4f46e5}
 
-/* Filter tabs */
 .filter-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
 .filter-tab{padding:6px 14px;border-radius:99px;border:1px solid var(--border);font-size:0.8rem;cursor:pointer;background:#fff}
 .filter-tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}
 
-/* Reveal */
-.reveal-area{margin:12px 0;min-height:40px}
-.reveal-word{font-size:1.5rem;font-weight:800;color:var(--danger)}
+.reveal-area{margin:8px 0;min-height:32px}
+.reveal-word{font-size:1.4rem;font-weight:800;color:var(--danger)}
 
-/* Reset */
 .reset-section{margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
 
-/* Letters */
-.letter-hint{font-size:1rem;color:var(--muted);letter-spacing:4px;margin:8px 0;font-family:monospace}
+.congrats{font-size:1.2rem;padding:20px}
+.congrats .big{font-size:3rem}
 
-/* Responsive */
 @media(max-width:480px){
   .options{grid-template-columns:1fr}
-  .input-row input{width:200px;font-size:1.1rem}
-  .word-chinese{font-size:1.6rem}
+  .input-row input{width:220px;font-size:1.1rem}
+  .clue-chinese{font-size:1.3rem}
   .quiz-word{font-size:1.8rem}
+  .nav button{padding:6px 12px;font-size:0.75rem}
 }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1>📚 NAPLAN Year 3 单词学习</h1>
-  <p>拼写 + 词义选择 · 间隔重复 · 学到会为止</p>
+  <h1>📚 NAPLAN Vocabulary 单词学习</h1>
+  <p>Spell · Match · Quiz · Learn until you know it! 学到会为止！</p>
 </div>
 
 <div class="stats-bar">
-  <div class="stat"><div class="stat-num green" id="s-mastered">0</div><div class="stat-label">已掌握 ✅</div></div>
-  <div class="stat"><div class="stat-num orange" id="s-learning">0</div><div class="stat-label">学习中 📝</div></div>
-  <div class="stat"><div class="stat-num" id="s-new">0</div><div class="stat-label">待学习 🆕</div></div>
-  <div class="stat"><div class="stat-num" id="s-total">0</div><div class="stat-label">总计</div></div>
+  <div class="stat"><div class="stat-num green" id="s-mastered">0</div><div class="stat-label">Mastered ✅</div></div>
+  <div class="stat"><div class="stat-num orange" id="s-learning">0</div><div class="stat-label">Learning 📝</div></div>
+  <div class="stat"><div class="stat-num" id="s-new">0</div><div class="stat-label">New 🆕</div></div>
+  <div class="stat"><div class="stat-num" id="s-total">0</div><div class="stat-label">Total</div></div>
 </div>
 
 <div class="nav">
-  <button class="active" onclick="switchMode('spell')">✏️ 拼写</button>
-  <button onclick="switchMode('quiz')">🎯 词义</button>
-  <button onclick="switchMode('list')">📋 词表</button>
+  <button class="active" onclick="switchMode('spell')">✏️ Spell 拼写</button>
+  <button onclick="switchMode('match')">🔤 Match 配对</button>
+  <button onclick="switchMode('quiz')">🎯 Quiz 词义</button>
+  <button onclick="switchMode('list')">📋 List 词表</button>
 </div>
 
 <div class="container">
-  <!-- Spelling Mode -->
+
+  <!-- SPELL MODE: See definition → type the word -->
   <div id="mode-spell">
     <div class="card">
-      <h2>看中文，拼英文 ✏️</h2>
-      <div class="word-chinese" id="spell-chinese"></div>
+      <h2>✏️ Spell the Word 拼写单词</h2>
+      <div class="subtitle">Read the meaning, then type the word<br>看释义，拼出单词</div>
+      <div class="clue-box">
+        <div class="clue-english" id="spell-en"></div>
+        <div class="clue-chinese" id="spell-cn"></div>
+      </div>
       <div class="letter-hint" id="spell-hint"></div>
       <div class="input-row">
-        <input type="text" id="spell-input" placeholder="输入英文单词..." autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+        <input type="text" id="spell-input" placeholder="Type the word here..." autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
       </div>
       <div class="feedback" id="spell-feedback"></div>
       <div class="reveal-area" id="spell-reveal"></div>
-      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-        <button class="btn btn-primary" onclick="checkSpelling()">检查 ✓</button>
-        <button class="btn btn-outline" onclick="showHint()">提示 💡</button>
-        <button class="btn btn-outline" onclick="revealAnswer()">看答案 👀</button>
-        <button class="btn btn-success" onclick="nextWord()">下一个 →</button>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkSpelling()">Check ✓</button>
+        <button class="btn btn-outline" onclick="showHint()">Hint 💡</button>
+        <button class="btn btn-outline" onclick="revealAnswer()">Show 👀</button>
+        <button class="btn btn-success" onclick="nextSpell()">Next →</button>
       </div>
-      <div class="progress-bar"><div class="progress-fill" id="spell-progress"></div></div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-bar"></div></div>
     </div>
   </div>
 
-  <!-- Quiz Mode -->
+  <!-- MATCH MODE: See definition → pick the correct word from 4 options -->
+  <div id="mode-match" style="display:none">
+    <div class="card">
+      <h2>🔤 Pick the Word 选单词</h2>
+      <div class="subtitle">Read the meaning, then pick the correct word<br>看释义，选出正确单词</div>
+      <div class="clue-box">
+        <div class="clue-english" id="match-en"></div>
+        <div class="clue-chinese" id="match-cn"></div>
+      </div>
+      <div class="options options-words" id="match-options"></div>
+      <div class="feedback" id="match-feedback"></div>
+      <div class="btn-row">
+        <button class="btn btn-success" id="match-next" onclick="nextMatch()" style="display:none">Next →</button>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-bar2"></div></div>
+    </div>
+  </div>
+
+  <!-- QUIZ MODE: See word → pick the meaning -->
   <div id="mode-quiz" style="display:none">
     <div class="card">
-      <h2>看英文，选中文 🎯</h2>
+      <h2>🎯 What Does It Mean? 什么意思？</h2>
+      <div class="subtitle">See the word, pick the correct meaning<br>看单词，选出正确释义</div>
       <div class="quiz-word" id="quiz-word"></div>
       <div class="options" id="quiz-options"></div>
       <div class="feedback" id="quiz-feedback"></div>
-      <div style="margin-top:12px">
-        <button class="btn btn-success" id="quiz-next" onclick="nextQuiz()" style="display:none">下一题 →</button>
+      <div class="btn-row">
+        <button class="btn btn-success" id="quiz-next" onclick="nextQuiz()" style="display:none">Next →</button>
       </div>
-      <div class="progress-bar"><div class="progress-fill" id="quiz-progress"></div></div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-bar3"></div></div>
     </div>
   </div>
 
-  <!-- Word List -->
+  <!-- WORD LIST -->
   <div id="mode-list" style="display:none">
     <div class="card">
-      <h2>📋 词汇表</h2>
+      <h2>📋 Word List 词汇表</h2>
       <div class="filter-tabs">
-        <div class="filter-tab active" onclick="filterList('all')">全部</div>
-        <div class="filter-tab" onclick="filterList('new')">🆕 待学习</div>
-        <div class="filter-tab" onclick="filterList('learning')">📝 学习中</div>
-        <div class="filter-tab" onclick="filterList('mastered')">✅ 已掌握</div>
+        <div class="filter-tab active" onclick="filterList('all',this)">All 全部</div>
+        <div class="filter-tab" onclick="filterList('new',this)">🆕 New</div>
+        <div class="filter-tab" onclick="filterList('learning',this)">📝 Learning</div>
+        <div class="filter-tab" onclick="filterList('mastered',this)">✅ Mastered</div>
       </div>
       <div class="word-list" id="word-list"></div>
       <div class="reset-section">
-        <button class="btn btn-danger btn-small" onclick="resetProgress()">🔄 重置所有进度</button>
+        <button class="btn btn-danger btn-small" onclick="resetProgress()">🔄 Reset All Progress 重置进度</button>
       </div>
     </div>
   </div>
+
 </div>
 
 <script src="vocab.js"></script>
 <script>
 // === State ===
-const STORAGE_KEY = 'naplan-vocab-v1';
+const STORAGE_KEY = 'naplan-vocab-v2';
 let state = loadState();
 let currentWord = null;
 let currentMode = 'spell';
 let hintLevel = 0;
-let quizAnswered = false;
+let answered = false;
 let listFilter = 'all';
 
-// Word state: { spellOk: number, quizOk: number, attempts: number, lastSeen: number }
-// mastered = spellOk >= 2 AND quizOk >= 2
-// learning = any attempts but not mastered
-// new = no attempts
-
 function loadState() {
-  try {
-    const s = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    return s || {};
-  } catch { return {}; }
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
 }
+function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
-function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-function getWordState(w) {
-  if (!state[w]) state[w] = { spellOk: 0, quizOk: 0, attempts: 0, lastSeen: 0 };
+function ws(w) {
+  if (!state[w]) state[w] = { sp: 0, ma: 0, qu: 0, att: 0, t: 0 };
   return state[w];
 }
 
+// Mastered = spell >=2 AND (match >=2 OR quiz >=2)
 function getStatus(w) {
-  const s = getWordState(w);
-  if (s.spellOk >= 2 && s.quizOk >= 2) return 'mastered';
-  if (s.attempts > 0) return 'learning';
+  const s = ws(w);
+  if (s.sp >= 2 && (s.ma >= 2 || s.qu >= 2)) return 'mastered';
+  if (s.att > 0) return 'learning';
   return 'new';
 }
 
 function getCounts() {
-  let mastered = 0, learning = 0, neww = 0;
-  for (const v of VOCAB) {
-    const st = getStatus(v.w);
-    if (st === 'mastered') mastered++;
-    else if (st === 'learning') learning++;
-    else neww++;
-  }
-  return { mastered, learning, new: neww, total: VOCAB.length };
+  let m=0,l=0,n=0;
+  for (const v of VOCAB) { const st=getStatus(v.w); if(st==='mastered')m++; else if(st==='learning')l++; else n++; }
+  return {mastered:m, learning:l, new:n, total:VOCAB.length};
 }
 
 function updateStats() {
@@ -236,85 +252,59 @@ function updateStats() {
   document.getElementById('s-learning').textContent = c.learning;
   document.getElementById('s-new').textContent = c.new;
   document.getElementById('s-total').textContent = c.total;
-  
   const pct = c.total > 0 ? (c.mastered / c.total * 100) : 0;
-  document.getElementById('spell-progress').style.width = pct + '%';
-  document.getElementById('quiz-progress').style.width = pct + '%';
+  document.querySelectorAll('[id^="progress-bar"]').forEach(el => el.style.width = pct + '%');
 }
 
-// === Word Selection (spaced repetition) ===
+// === Word picker (spaced repetition) ===
 function pickWord() {
-  // Priority: learning > new > mastered
-  // Within each: least recently seen first, with some randomness
   const now = Date.now();
-  const candidates = [];
-  
+  const cands = [];
   for (const v of VOCAB) {
-    const s = getWordState(v.w);
-    const status = getStatus(v.w);
-    let priority;
-    if (status === 'learning') priority = 0; // highest
-    else if (status === 'new') priority = 1;
-    else priority = 2; // mastered - skip mostly
-    
-    if (status === 'mastered') continue; // don't show mastered words
-    
-    const timeSince = now - (s.lastSeen || 0);
-    candidates.push({ vocab: v, priority, timeSince, attempts: s.attempts });
+    const s = ws(v.w);
+    const st = getStatus(v.w);
+    if (st === 'mastered') continue;
+    const pri = st === 'learning' ? 0 : 1;
+    cands.push({ v, pri, age: now - (s.t||0) });
   }
-  
-  if (candidates.length === 0) {
-    // All mastered! Show a random one for review
-    return VOCAB[Math.floor(Math.random() * VOCAB.length)];
-  }
-  
-  // Sort: priority first, then by time since last seen (longer = better)
-  candidates.sort((a, b) => {
-    if (a.priority !== b.priority) return a.priority - b.priority;
-    return b.timeSince - a.timeSince;
-  });
-  
-  // Pick from top 5 with randomness
-  const pool = candidates.slice(0, Math.min(5, candidates.length));
-  return pool[Math.floor(Math.random() * pool.length)].vocab;
+  if (!cands.length) return VOCAB[Math.floor(Math.random()*VOCAB.length)]; // all mastered
+  cands.sort((a,b) => a.pri !== b.pri ? a.pri - b.pri : b.age - a.age);
+  const pool = cands.slice(0, Math.min(6, cands.length));
+  return pool[Math.floor(Math.random()*pool.length)].v;
 }
 
-// === Spelling Mode ===
-function loadSpellWord() {
-  currentWord = pickWord();
-  hintLevel = 0;
-  document.getElementById('spell-chinese').textContent = currentWord.m;
-  document.getElementById('spell-hint').textContent = '';
+// Get English def (fallback to Chinese if no English def)
+function enDef(v) { return v.e || v.m; }
+
+// === SPELL MODE ===
+function loadSpell() {
+  currentWord = pickWord(); hintLevel = 0;
+  document.getElementById('spell-en').textContent = enDef(currentWord);
+  document.getElementById('spell-cn').textContent = currentWord.m;
+  document.getElementById('spell-hint').textContent = `( ${currentWord.w.length} letters )`;
   document.getElementById('spell-input').value = '';
   document.getElementById('spell-input').className = '';
-  document.getElementById('spell-feedback').textContent = '';
-  document.getElementById('spell-feedback').className = 'feedback';
+  document.getElementById('spell-feedback').innerHTML = '';
   document.getElementById('spell-reveal').innerHTML = '';
   document.getElementById('spell-input').focus();
 }
 
 function checkSpelling() {
-  const input = document.getElementById('spell-input').value.trim().toLowerCase();
+  const inp = document.getElementById('spell-input').value.trim().toLowerCase();
   const correct = currentWord.w.toLowerCase();
-  const ws = getWordState(currentWord.w);
-  ws.attempts++;
-  ws.lastSeen = Date.now();
-  
-  if (input === correct) {
-    ws.spellOk++;
+  const s = ws(currentWord.w); s.att++; s.t = Date.now();
+
+  if (inp === correct) {
+    s.sp++;
     document.getElementById('spell-input').className = 'correct';
-    document.getElementById('spell-feedback').textContent = '✅ 正确！太棒了！';
-    document.getElementById('spell-feedback').className = 'feedback correct';
-    saveState();
-    updateStats();
-    setTimeout(() => loadSpellWord(), 1200);
+    document.getElementById('spell-feedback').innerHTML = '<span class="correct">✅ Correct! 正确！</span>';
+    saveState(); updateStats();
+    setTimeout(loadSpell, 1000);
   } else {
-    ws.spellOk = Math.max(0, ws.spellOk - 1);
+    s.sp = Math.max(0, s.sp - 1);
     document.getElementById('spell-input').className = 'wrong';
-    document.getElementById('spell-feedback').textContent = '❌ 再试一次！';
-    document.getElementById('spell-feedback').className = 'feedback wrong';
-    saveState();
-    updateStats();
+    document.getElementById('spell-feedback').innerHTML = '<span class="wrong">❌ Try again! 再试一次！</span>';
+    saveState(); updateStats();
   }
 }
 
@@ -322,183 +312,205 @@ function showHint() {
   if (!currentWord) return;
   hintLevel++;
   const w = currentWord.w;
-  let hint = '';
-  
+  let hint;
   if (hintLevel === 1) {
-    // Show first and last letter + length
-    hint = w[0] + ' _ '.repeat(w.length - 2) + w[w.length - 1] + `  (${w.length}个字母)`;
+    hint = w[0] + ' _ '.repeat(w.length - 2).trim() + ' ' + w[w.length-1];
   } else if (hintLevel === 2) {
-    // Show every other letter
-    hint = w.split('').map((c, i) => i % 2 === 0 ? c : '_').join(' ');
+    hint = w.split('').map((c,i) => i%2===0?c:'_').join(' ');
   } else {
-    // Show all but one
-    const hide = Math.floor(Math.random() * (w.length - 2)) + 1;
-    hint = w.split('').map((c, i) => i === hide ? '_' : c).join(' ');
+    const hide = Math.floor(Math.random()*(w.length-2))+1;
+    hint = w.split('').map((c,i) => i===hide?'_':c).join(' ');
   }
-  
   document.getElementById('spell-hint').textContent = hint;
 }
 
 function revealAnswer() {
   if (!currentWord) return;
   document.getElementById('spell-reveal').innerHTML = `<span class="reveal-word">${currentWord.w}</span>`;
-  const ws = getWordState(currentWord.w);
-  ws.spellOk = Math.max(0, ws.spellOk - 1);
-  ws.attempts++;
-  ws.lastSeen = Date.now();
-  saveState();
-  updateStats();
+  const s = ws(currentWord.w); s.sp = Math.max(0, s.sp-1); s.att++; s.t = Date.now();
+  saveState(); updateStats();
 }
 
-function nextWord() {
-  loadSpellWord();
-}
+function nextSpell() { loadSpell(); }
 
-// === Quiz Mode ===
-function loadQuiz() {
-  currentWord = pickWord();
-  quizAnswered = false;
-  document.getElementById('quiz-word').textContent = currentWord.w;
-  document.getElementById('quiz-feedback').textContent = '';
-  document.getElementById('quiz-feedback').className = 'feedback';
-  document.getElementById('quiz-next').style.display = 'none';
-  
-  // Generate 4 options (1 correct + 3 random)
-  const correctMeaning = currentWord.m;
-  const wrongMeanings = [];
-  const pool = VOCAB.filter(v => v.w !== currentWord.w);
-  
-  while (wrongMeanings.length < 3 && pool.length > 0) {
-    const idx = Math.floor(Math.random() * pool.length);
-    const m = pool[idx].m;
-    if (!wrongMeanings.includes(m) && m !== correctMeaning) {
-      wrongMeanings.push(m);
-    }
-    pool.splice(idx, 1);
+// === MATCH MODE: see definition → pick word ===
+function loadMatch() {
+  currentWord = pickWord(); answered = false;
+  document.getElementById('match-en').textContent = enDef(currentWord);
+  document.getElementById('match-cn').textContent = currentWord.m;
+  document.getElementById('match-feedback').innerHTML = '';
+  document.getElementById('match-next').style.display = 'none';
+
+  // 4 word options
+  const correctW = currentWord.w;
+  const wrongs = [];
+  const pool = VOCAB.filter(v => v.w !== correctW);
+  // Pick words of similar length for difficulty
+  const len = correctW.length;
+  pool.sort((a,b) => Math.abs(a.w.length-len) - Math.abs(b.w.length-len));
+  const similar = pool.slice(0, Math.min(30, pool.length));
+  while (wrongs.length < 3 && similar.length > 0) {
+    const idx = Math.floor(Math.random()*similar.length);
+    wrongs.push(similar[idx].w);
+    similar.splice(idx,1);
   }
-  
-  const options = [correctMeaning, ...wrongMeanings];
-  // Shuffle
-  for (let i = options.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [options[i], options[j]] = [options[j], options[i]];
-  }
-  
-  const container = document.getElementById('quiz-options');
+
+  const opts = [correctW, ...wrongs];
+  shuffle(opts);
+
+  const container = document.getElementById('match-options');
   container.innerHTML = '';
-  options.forEach(opt => {
+  opts.forEach(w => {
     const btn = document.createElement('div');
     btn.className = 'option';
-    btn.textContent = opt;
-    btn.onclick = () => selectOption(btn, opt, correctMeaning);
+    btn.textContent = w;
+    btn.onclick = () => selectMatch(btn, w, correctW);
     container.appendChild(btn);
   });
 }
 
-function selectOption(btn, selected, correct) {
-  if (quizAnswered) return;
-  quizAnswered = true;
-  
-  const ws = getWordState(currentWord.w);
-  ws.attempts++;
-  ws.lastSeen = Date.now();
-  
-  // Disable all options
-  document.querySelectorAll('.option').forEach(o => o.classList.add('disabled'));
-  
+function selectMatch(btn, selected, correct) {
+  if (answered) return;
+  answered = true;
+  document.querySelectorAll('#match-options .option').forEach(o => o.classList.add('disabled'));
+  const s = ws(currentWord.w); s.att++; s.t = Date.now();
+
   if (selected === correct) {
-    ws.quizOk++;
-    btn.classList.add('correct');
-    document.getElementById('quiz-feedback').textContent = '✅ 正确！';
-    document.getElementById('quiz-feedback').className = 'feedback correct';
+    s.ma++; btn.classList.add('correct');
+    document.getElementById('match-feedback').innerHTML = '<span class="correct">✅ Correct! 正确！</span>';
   } else {
-    ws.quizOk = Math.max(0, ws.quizOk - 1);
-    btn.classList.add('wrong');
-    // Highlight correct answer
-    document.querySelectorAll('.option').forEach(o => {
-      if (o.textContent === correct) o.classList.add('correct');
-    });
-    document.getElementById('quiz-feedback').textContent = `❌ 正确答案: ${correct}`;
-    document.getElementById('quiz-feedback').className = 'feedback wrong';
+    s.ma = Math.max(0, s.ma-1); btn.classList.add('wrong');
+    document.querySelectorAll('#match-options .option').forEach(o => { if(o.textContent===correct) o.classList.add('correct'); });
+    document.getElementById('match-feedback').innerHTML = `<span class="wrong">❌ The answer is: <strong>${correct}</strong></span>`;
   }
-  
-  saveState();
-  updateStats();
+  saveState(); updateStats();
+  document.getElementById('match-next').style.display = 'inline-block';
+}
+
+function nextMatch() { loadMatch(); }
+
+// === QUIZ MODE: see word → pick meaning ===
+function loadQuiz() {
+  currentWord = pickWord(); answered = false;
+  document.getElementById('quiz-word').textContent = currentWord.w;
+  document.getElementById('quiz-feedback').innerHTML = '';
+  document.getElementById('quiz-next').style.display = 'none';
+
+  const correctM = currentWord.m;
+  const correctE = enDef(currentWord);
+  const wrongs = [];
+  const pool = VOCAB.filter(v => v.w !== currentWord.w);
+  while (wrongs.length < 3 && pool.length > 0) {
+    const idx = Math.floor(Math.random()*pool.length);
+    const v = pool[idx];
+    if (!wrongs.find(x => x.m === v.m)) {
+      wrongs.push({ m: v.m, e: enDef(v) });
+    }
+    pool.splice(idx,1);
+  }
+
+  const opts = [{ m: correctM, e: correctE, correct: true }, ...wrongs.map(x => ({...x, correct:false}))];
+  shuffle(opts);
+
+  const container = document.getElementById('quiz-options');
+  container.innerHTML = '';
+  opts.forEach(opt => {
+    const btn = document.createElement('div');
+    btn.className = 'option';
+    btn.innerHTML = `<div class="opt-en">${opt.e}</div><div class="opt-cn">${opt.m}</div>`;
+    btn.onclick = () => selectQuiz(btn, opt.correct, correctE, correctM);
+    container.appendChild(btn);
+  });
+}
+
+function selectQuiz(btn, isCorrect, correctE, correctM) {
+  if (answered) return;
+  answered = true;
+  document.querySelectorAll('#quiz-options .option').forEach(o => o.classList.add('disabled'));
+  const s = ws(currentWord.w); s.att++; s.t = Date.now();
+
+  if (isCorrect) {
+    s.qu++; btn.classList.add('correct');
+    document.getElementById('quiz-feedback').innerHTML = '<span class="correct">✅ Correct! 正确！</span>';
+  } else {
+    s.qu = Math.max(0, s.qu-1); btn.classList.add('wrong');
+    document.querySelectorAll('#quiz-options .option').forEach(o => {
+      if (o.querySelector('.opt-en').textContent === correctE) o.classList.add('correct');
+    });
+    document.getElementById('quiz-feedback').innerHTML = `<span class="wrong">❌ Answer: ${correctE} / ${correctM}</span>`;
+  }
+  saveState(); updateStats();
   document.getElementById('quiz-next').style.display = 'inline-block';
 }
 
-function nextQuiz() {
-  loadQuiz();
-}
+function nextQuiz() { loadQuiz(); }
 
-// === Word List ===
+// === WORD LIST ===
 function renderList() {
   const container = document.getElementById('word-list');
-  const sorted = [...VOCAB].sort((a, b) => a.w.localeCompare(b.w));
-  
+  const sorted = [...VOCAB].sort((a,b) => a.w.localeCompare(b.w));
   let html = '';
   for (const v of sorted) {
-    const status = getStatus(v.w);
-    if (listFilter !== 'all' && status !== listFilter) continue;
-    
-    let badgeClass, badgeText;
-    if (status === 'mastered') { badgeClass = 'badge-mastered'; badgeText = '✅ 掌握'; }
-    else if (status === 'learning') { badgeClass = 'badge-learning'; badgeText = '📝 学习中'; }
-    else { badgeClass = 'badge-new'; badgeText = '🆕 新词'; }
-    
+    const st = getStatus(v.w);
+    if (listFilter !== 'all' && st !== listFilter) continue;
+    let bc, bt;
+    if (st==='mastered'){bc='badge-mastered';bt='✅ Mastered';}
+    else if(st==='learning'){bc='badge-learning';bt='📝 Learning';}
+    else{bc='badge-new';bt='🆕 New';}
     html += `<div class="word-item">
-      <span><span class="eng">${v.w}</span> <span class="chn">${v.m}</span></span>
-      <span class="badge ${badgeClass}">${badgeText}</span>
-    </div>`;
+      <div class="wi-left"><span class="eng">${v.w}</span><br>
+      <span class="def">${enDef(v)} · ${v.m}</span></div>
+      <span class="badge ${bc}">${bt}</span></div>`;
   }
-  
-  if (!html) html = '<div style="padding:20px;text-align:center;color:var(--muted)">没有符合条件的单词</div>';
+  if(!html) html = '<div style="padding:20px;text-align:center;color:var(--muted)">No words found 没有符合条件的单词</div>';
   container.innerHTML = html;
 }
 
-function filterList(filter) {
-  listFilter = filter;
+function filterList(f, el) {
+  listFilter = f;
   document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-  event.target.classList.add('active');
+  el.classList.add('active');
   renderList();
 }
 
 function resetProgress() {
-  if (confirm('确定要重置所有学习进度吗？这将清除所有记录！')) {
-    state = {};
-    saveState();
-    updateStats();
-    renderList();
-    if (currentMode === 'spell') loadSpellWord();
-    else if (currentMode === 'quiz') loadQuiz();
+  if (confirm('Reset all progress? 确定要重置所有学习进度吗？')) {
+    state = {}; saveState(); updateStats(); init();
   }
 }
 
-// === Mode Switch ===
+// === Helpers ===
+function shuffle(arr) {
+  for (let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
+}
+
 function switchMode(mode) {
   currentMode = mode;
   document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
   event.target.classList.add('active');
-  
-  document.getElementById('mode-spell').style.display = mode === 'spell' ? 'block' : 'none';
-  document.getElementById('mode-quiz').style.display = mode === 'quiz' ? 'block' : 'none';
-  document.getElementById('mode-list').style.display = mode === 'list' ? 'block' : 'none';
-  
-  if (mode === 'spell') loadSpellWord();
-  else if (mode === 'quiz') loadQuiz();
+  ['spell','match','quiz','list'].forEach(m => {
+    document.getElementById('mode-'+m).style.display = m===mode?'block':'none';
+  });
+  if (mode==='spell') loadSpell();
+  else if (mode==='match') loadMatch();
+  else if (mode==='quiz') loadQuiz();
   else renderList();
 }
 
-// === Keyboard ===
+function init() {
+  updateStats();
+  if (currentMode==='spell') loadSpell();
+  else if (currentMode==='match') loadMatch();
+  else if (currentMode==='quiz') loadQuiz();
+  else renderList();
+}
+
+// Keyboard
 document.addEventListener('keydown', e => {
-  if (currentMode === 'spell' && e.key === 'Enter') {
-    checkSpelling();
-  }
+  if (currentMode==='spell' && e.key==='Enter') checkSpelling();
 });
 
-// === Init ===
-updateStats();
-loadSpellWord();
+init();
 </script>
 </body>
 </html>
