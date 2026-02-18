@@ -390,7 +390,6 @@ function pickWord() {
     const s = ws(v.w);
     const st = getStatus(v.w);
     if (st === 'mastered') continue;
-    // Wrong book words get highest priority
     let pri;
     if (wrongBook[v.w]) pri = -1;
     else if (st === 'learning') pri = 0;
@@ -398,9 +397,11 @@ function pickWord() {
     cands.push({ v, pri, age: now - (s.t||0) });
   }
   if (!cands.length) return VOCAB[Math.floor(Math.random()*VOCAB.length)];
-  cands.sort((a,b) => a.pri !== b.pri ? a.pri - b.pri : b.age - a.age);
-  const pool = cands.slice(0, Math.min(6, cands.length));
-  return pool[Math.floor(Math.random()*pool.length)].v;
+  // Group by priority, then pick randomly within each group
+  const minPri = Math.min(...cands.map(c => c.pri));
+  const topGroup = cands.filter(c => c.pri === minPri);
+  // Pick randomly from top priority group (truly random, no alphabetical bias)
+  return topGroup[Math.floor(Math.random() * topGroup.length)].v;
 }
 
 function enDef(v) { return v.e || v.m; }
