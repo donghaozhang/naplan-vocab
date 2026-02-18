@@ -14,10 +14,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .header p{font-size:0.85rem;opacity:0.9;margin-top:4px}
 
 .stats-bar{display:flex;justify-content:center;gap:16px;padding:12px;background:#fff;border-bottom:1px solid var(--border);flex-wrap:wrap}
-.stat{text-align:center;min-width:70px}
+.stat{text-align:center;min-width:60px}
 .stat-num{font-size:1.3rem;font-weight:800;color:var(--primary)}
 .stat-num.green{color:var(--success)}
 .stat-num.orange{color:var(--warning)}
+.stat-num.red{color:var(--danger)}
 .stat-label{font-size:0.7rem;color:var(--muted)}
 
 .nav{display:flex;justify-content:center;gap:6px;padding:12px;background:#fff;border-bottom:1px solid var(--border);flex-wrap:wrap}
@@ -25,16 +26,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .nav button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
 .nav button:hover:not(.active){border-color:var(--primary);color:var(--primary)}
 
-.container{max-width:600px;margin:0 auto;padding:20px}
+/* Layout: main + sidebar */
+.layout{display:flex;max-width:1000px;margin:0 auto;padding:20px;gap:16px}
+.main-col{flex:1;min-width:0}
+.side-col{width:280px;flex-shrink:0}
 
-.card{background:var(--card);border-radius:var(--radius);padding:28px 24px;box-shadow:0 4px 24px rgba(0,0,0,0.08);text-align:center;margin-bottom:20px}
+.card{background:var(--card);border-radius:var(--radius);padding:28px 24px;box-shadow:0 4px 24px rgba(0,0,0,0.08);text-align:center;margin-bottom:16px}
 .card h2{font-size:1rem;color:var(--muted);margin-bottom:4px}
 .card .subtitle{font-size:0.8rem;color:var(--muted);margin-bottom:12px}
 
 .clue-box{background:linear-gradient(135deg,#eff6ff,#f5f3ff);border:2px solid #c7d2fe;border-radius:14px;padding:20px;margin:12px 0}
 .clue-chinese{font-size:1.6rem;font-weight:800;color:var(--text)}
 .clue-english{font-size:1.1rem;color:var(--primary);margin-top:6px;font-style:italic}
-.clue-only-english{font-size:1.3rem;color:var(--primary);font-weight:600}
 
 .letter-hint{font-size:1rem;color:var(--muted);letter-spacing:4px;margin:8px 0;font-family:monospace}
 
@@ -45,7 +48,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .input-row input.wrong{border-color:var(--danger);background:#fef2f2}
 
 .quiz-word{font-size:2.2rem;font-weight:800;margin:12px 0;color:var(--primary)}
-.quiz-word-sub{font-size:0.9rem;color:var(--muted);margin-bottom:12px}
 
 .options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
 .option{padding:14px 12px;border:2px solid var(--border);border-radius:12px;background:#fff;font-size:0.95rem;cursor:pointer;transition:all .15s;text-align:center;line-height:1.4}
@@ -58,20 +60,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .option.wrong{border-color:var(--danger);background:#fef2f2;color:var(--danger)}
 .option.wrong .opt-cn{color:var(--danger)}
 .option.disabled{pointer-events:none}
-
-/* Word match options - show English words */
 .options-words .option{font-size:1.2rem;font-weight:700;letter-spacing:1px}
 
 .feedback{font-size:1.1rem;font-weight:700;margin:12px 0;min-height:32px}
 .feedback.correct{color:var(--success)}
 .feedback.wrong{color:var(--danger)}
-.feedback .fb-answer{font-size:0.9rem;font-weight:400;margin-top:4px}
 
 .btn{padding:10px 24px;border:none;border-radius:12px;font-size:0.9rem;font-weight:700;cursor:pointer;transition:all .15s}
 .btn-primary{background:var(--primary);color:#fff}
 .btn-primary:hover{background:var(--primary-dark)}
 .btn-success{background:var(--success);color:#fff}
 .btn-danger{background:var(--danger);color:#fff}
+.btn-warning{background:var(--warning);color:#fff}
 .btn-outline{background:#fff;border:2px solid var(--border);color:var(--text)}
 .btn-outline:hover{border-color:var(--primary)}
 .btn-small{padding:8px 16px;font-size:0.8rem}
@@ -80,8 +80,28 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .progress-bar{width:100%;height:8px;background:var(--border);border-radius:99px;margin:12px 0;overflow:hidden}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--success));border-radius:99px;transition:width .3s}
 
+/* Sidebar: Wrong words */
+.wrong-book{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:0 4px 24px rgba(0,0,0,0.08)}
+.wrong-book h3{font-size:0.9rem;color:var(--danger);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.wrong-book .count{background:#fef2f2;color:var(--danger);font-size:0.7rem;padding:1px 8px;border-radius:99px;font-weight:700}
+.wrong-list{max-height:500px;overflow-y:auto}
+.wrong-item{display:flex;align-items:center;gap:8px;padding:8px 6px;border-bottom:1px solid var(--border);font-size:0.8rem;text-align:left}
+.wrong-item .wi-word{font-weight:700;font-size:0.9rem;color:var(--danger);min-width:70px}
+.wrong-item .wi-def{color:var(--muted);flex:1;font-size:0.75rem}
+.wrong-item .wi-count{background:#fef2f2;color:var(--danger);font-size:0.65rem;padding:1px 6px;border-radius:99px;white-space:nowrap}
+.wrong-empty{color:var(--muted);font-size:0.8rem;padding:20px;text-align:center}
+.wrong-book .clear-btn{margin-top:10px;text-align:center}
+
+.speak-btn{background:none;border:none;font-size:1.8rem;cursor:pointer;padding:4px 8px;border-radius:8px;transition:all .15s;vertical-align:middle}
+.speak-btn:hover{background:#eff6ff;transform:scale(1.15)}
+.speak-btn:active{transform:scale(0.95)}
+.speak-btn.small{font-size:1.1rem;padding:2px 4px}
+.auto-speak{display:flex;align-items:center;justify-content:center;gap:6px;margin:8px 0;font-size:0.8rem;color:var(--muted)}
+.auto-speak input{margin:0}
+
+/* Word list */
 .word-list{max-height:400px;overflow-y:auto;text-align:left}
-.word-item{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid var(--border);font-size:0.85rem;gap:8px}
+.word-item{display:flex;justify-content:space-between;align-items:center;padding:10px 8px;border-bottom:1px solid var(--border);font-size:0.85rem;gap:6px}
 .word-item .wi-left{flex:1}
 .word-item .eng{font-weight:700;font-size:0.95rem}
 .word-item .def{color:var(--muted);font-size:0.8rem}
@@ -89,27 +109,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .badge-mastered{background:#dcfce7;color:#16a34a}
 .badge-learning{background:#fef3c7;color:#d97706}
 .badge-new{background:#e0e7ff;color:#4f46e5}
-
 .filter-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
 .filter-tab{padding:6px 14px;border-radius:99px;border:1px solid var(--border);font-size:0.8rem;cursor:pointer;background:#fff}
 .filter-tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}
-
 .reveal-area{margin:8px 0;min-height:32px}
 .reveal-word{font-size:1.4rem;font-weight:800;color:var(--danger)}
-
 .reset-section{margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
 
-.speak-btn{background:none;border:none;font-size:1.8rem;cursor:pointer;padding:4px 8px;border-radius:8px;transition:all .15s;vertical-align:middle}
-.speak-btn:hover{background:#eff6ff;transform:scale(1.15)}
-.speak-btn:active{transform:scale(0.95)}
-.speak-btn.small{font-size:1.2rem}
-.auto-speak{display:flex;align-items:center;justify-content:center;gap:6px;margin:8px 0;font-size:0.8rem;color:var(--muted)}
-.auto-speak input{margin:0}
-
-.congrats{font-size:1.2rem;padding:20px}
-.congrats .big{font-size:3rem}
-
-@media(max-width:480px){
+@media(max-width:760px){
+  .layout{flex-direction:column}
+  .side-col{width:100%}
+  .wrong-list{max-height:200px}
   .options{grid-template-columns:1fr}
   .input-row input{width:220px;font-size:1.1rem}
   .clue-chinese{font-size:1.3rem}
@@ -129,6 +139,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="stat"><div class="stat-num green" id="s-mastered">0</div><div class="stat-label">Mastered ✅</div></div>
   <div class="stat"><div class="stat-num orange" id="s-learning">0</div><div class="stat-label">Learning 📝</div></div>
   <div class="stat"><div class="stat-num" id="s-new">0</div><div class="stat-label">New 🆕</div></div>
+  <div class="stat"><div class="stat-num red" id="s-wrong">0</div><div class="stat-label">Wrong ❌</div></div>
   <div class="stat"><div class="stat-num" id="s-total">0</div><div class="stat-label">Total</div></div>
 </div>
 
@@ -137,15 +148,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <button onclick="switchMode('match')">🔤 Match 配对</button>
   <button onclick="switchMode('quiz')">🎯 Quiz 词义</button>
   <button onclick="switchMode('list')">📋 List 词表</button>
+  <button onclick="switchMode('wrong')">❌ Wrong 错题本</button>
 </div>
 
-<div class="container">
+<div class="layout">
+<div class="main-col">
 
-  <!-- SPELL MODE: See definition → type the word -->
+  <!-- SPELL MODE -->
   <div id="mode-spell">
     <div class="card">
       <h2>✏️ Spell the Word 拼写单词</h2>
-      <div class="subtitle">Read the meaning, then type the word<br>看释义，拼出单词</div>
+      <div class="subtitle">Read the meaning, then type the word · 看释义，拼出单词</div>
       <div class="auto-speak"><label><input type="checkbox" id="auto-speak" checked> 🔊 Auto-play sound 自动读音</label></div>
       <div class="clue-box">
         <div class="clue-english" id="spell-en"></div>
@@ -158,6 +171,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="feedback" id="spell-feedback"></div>
       <div class="reveal-area" id="spell-reveal"></div>
       <div class="btn-row">
+        <button class="btn btn-warning" onclick="goBack()">← Back 返回</button>
         <button class="btn btn-primary" onclick="checkSpelling()">Check ✓</button>
         <button class="btn btn-outline" onclick="showHint()">Hint 💡</button>
         <button class="btn btn-outline" onclick="speakWord()">🔊 Listen</button>
@@ -168,11 +182,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
-  <!-- MATCH MODE: See definition → pick the correct word from 4 options -->
+  <!-- MATCH MODE -->
   <div id="mode-match" style="display:none">
     <div class="card">
       <h2>🔤 Pick the Word 选单词</h2>
-      <div class="subtitle">Read the meaning, then pick the correct word<br>看释义，选出正确单词</div>
+      <div class="subtitle">Read the meaning, pick the correct word · 看释义，选正确单词</div>
       <div class="clue-box">
         <div class="clue-english" id="match-en"></div>
         <div class="clue-chinese" id="match-cn"></div>
@@ -180,23 +194,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="options options-words" id="match-options"></div>
       <div class="feedback" id="match-feedback"></div>
       <div class="btn-row">
-        <button class="btn btn-outline" onclick="speakWord()">🔊 Listen 听发音</button>
+        <button class="btn btn-warning" onclick="goBack()">← Back 返回</button>
+        <button class="btn btn-outline" onclick="speakWord()">🔊 Listen</button>
         <button class="btn btn-success" id="match-next" onclick="nextMatch()" style="display:none">Next →</button>
       </div>
       <div class="progress-bar"><div class="progress-fill" id="progress-bar2"></div></div>
     </div>
   </div>
 
-  <!-- QUIZ MODE: See word → pick the meaning -->
+  <!-- QUIZ MODE -->
   <div id="mode-quiz" style="display:none">
     <div class="card">
       <h2>🎯 What Does It Mean? 什么意思？</h2>
-      <div class="subtitle">See the word, pick the correct meaning<br>看单词，选出正确释义</div>
+      <div class="subtitle">See the word, pick the correct meaning · 看单词，选正确释义</div>
       <div class="quiz-word" id="quiz-word"></div>
-      <button class="speak-btn" onclick="speakWord()" title="Listen 听发音">🔊</button>
+      <button class="speak-btn" onclick="speakWord()" title="Listen">🔊</button>
       <div class="options" id="quiz-options"></div>
       <div class="feedback" id="quiz-feedback"></div>
       <div class="btn-row">
+        <button class="btn btn-warning" onclick="goBack()">← Back 返回</button>
         <button class="btn btn-success" id="quiz-next" onclick="nextQuiz()" style="display:none">Next →</button>
       </div>
       <div class="progress-bar"><div class="progress-fill" id="progress-bar3"></div></div>
@@ -220,30 +236,61 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
+  <!-- WRONG BOOK (full page) -->
+  <div id="mode-wrong" style="display:none">
+    <div class="card">
+      <h2>❌ Wrong Book 错题本</h2>
+      <div class="subtitle">Words you got wrong · 答错的单词</div>
+      <div id="wrong-full-list"></div>
+      <div class="btn-row" style="margin-top:16px">
+        <button class="btn btn-danger btn-small" onclick="clearWrongBook()">🗑️ Clear All 清空错题本</button>
+        <button class="btn btn-primary btn-small" onclick="practiceWrong()">📝 Practice Wrong Words 练错题</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SIDEBAR: Wrong book (live) -->
+<div class="side-col">
+  <div class="wrong-book" id="wrong-sidebar">
+    <h3>❌ Wrong Book 错题本 <span class="count" id="wrong-count">0</span></h3>
+    <div class="wrong-list" id="wrong-list"></div>
+    <div class="clear-btn">
+      <button class="btn btn-outline btn-small" onclick="clearWrongBook()">🗑️ Clear 清空</button>
+    </div>
+  </div>
+</div>
+
 </div>
 
 <script src="vocab.js"></script>
 <script>
 // === State ===
 const STORAGE_KEY = 'naplan-vocab-v2';
+const WRONG_KEY = 'naplan-wrong-v1';
 let state = loadState();
+let wrongBook = loadWrongBook(); // { word: { count: N, m: "...", e: "..." } }
 let currentWord = null;
+let previousWord = null; // for Go Back
+let previousState = null; // snapshot for Go Back
 let currentMode = 'spell';
 let hintLevel = 0;
 let answered = false;
+let spellChecked = false; // track if user checked before next
 let listFilter = 'all';
+let history = []; // word history stack
 
-function loadState() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
-}
+function loadState() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; } }
 function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+function loadWrongBook() { try { return JSON.parse(localStorage.getItem(WRONG_KEY)) || {}; } catch { return {}; } }
+function saveWrongBook() { localStorage.setItem(WRONG_KEY, JSON.stringify(wrongBook)); renderWrongSidebar(); }
 
 function ws(w) {
-  if (!state[w]) state[w] = { sp: 0, ma: 0, qu: 0, att: 0, t: 0 };
+  if (!state[w]) state[w] = { sp:0, ma:0, qu:0, att:0, t:0 };
   return state[w];
 }
 
-// Mastered = spell >=2 AND (match >=2 OR quiz >=2)
 function getStatus(w) {
   const s = ws(w);
   if (s.sp >= 2 && (s.ma >= 2 || s.qu >= 2)) return 'mastered';
@@ -254,7 +301,7 @@ function getStatus(w) {
 function getCounts() {
   let m=0,l=0,n=0;
   for (const v of VOCAB) { const st=getStatus(v.w); if(st==='mastered')m++; else if(st==='learning')l++; else n++; }
-  return {mastered:m, learning:l, new:n, total:VOCAB.length};
+  return {mastered:m, learning:l, new:n, total:VOCAB.length, wrong:Object.keys(wrongBook).length};
 }
 
 function updateStats() {
@@ -262,12 +309,80 @@ function updateStats() {
   document.getElementById('s-mastered').textContent = c.mastered;
   document.getElementById('s-learning').textContent = c.learning;
   document.getElementById('s-new').textContent = c.new;
+  document.getElementById('s-wrong').textContent = c.wrong;
   document.getElementById('s-total').textContent = c.total;
   const pct = c.total > 0 ? (c.mastered / c.total * 100) : 0;
   document.querySelectorAll('[id^="progress-bar"]').forEach(el => el.style.width = pct + '%');
+  document.getElementById('wrong-count').textContent = c.wrong;
 }
 
-// === Word picker (spaced repetition) ===
+// === Wrong Book ===
+function addToWrongBook(v) {
+  const key = v.w;
+  if (!wrongBook[key]) {
+    wrongBook[key] = { count: 1, m: v.m, e: enDef(v) };
+  } else {
+    wrongBook[key].count++;
+  }
+  saveWrongBook();
+  updateStats();
+}
+
+function renderWrongSidebar() {
+  const entries = Object.entries(wrongBook).sort((a,b) => b[1].count - a[1].count);
+  const container = document.getElementById('wrong-list');
+  if (!entries.length) {
+    container.innerHTML = '<div class="wrong-empty">🎉 No wrong words!<br>没有错题！</div>';
+    return;
+  }
+  let html = '';
+  for (const [w, info] of entries) {
+    html += `<div class="wrong-item">
+      <button class="speak-btn small" onclick="speak('${w}','en-US')">🔊</button>
+      <span class="wi-word">${w}</span>
+      <span class="wi-def">${info.e} · ${info.m}</span>
+      <span class="wi-count">×${info.count}</span>
+    </div>`;
+  }
+  container.innerHTML = html;
+}
+
+function renderWrongFullList() {
+  const entries = Object.entries(wrongBook).sort((a,b) => b[1].count - a[1].count);
+  const container = document.getElementById('wrong-full-list');
+  if (!entries.length) {
+    container.innerHTML = '<div class="wrong-empty" style="padding:40px">🎉 Great job! No wrong words!<br>太棒了！没有错题！</div>';
+    return;
+  }
+  let html = '<div class="word-list" style="max-height:500px">';
+  for (const [w, info] of entries) {
+    html += `<div class="word-item">
+      <button class="speak-btn small" onclick="speak('${w}','en-US')">🔊</button>
+      <div class="wi-left"><span class="eng" style="color:var(--danger)">${w}</span><br>
+      <span class="def">${info.e} · ${info.m}</span></div>
+      <span style="color:var(--danger);font-weight:700;font-size:0.85rem">×${info.count}</span>
+    </div>`;
+  }
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function clearWrongBook() {
+  if (confirm('Clear all wrong words? 确定清空错题本？')) {
+    wrongBook = {};
+    saveWrongBook();
+    updateStats();
+    renderWrongFullList();
+  }
+}
+
+function practiceWrong() {
+  // Switch to spell mode but only with wrong words
+  alert('Tip: Wrong words are already prioritized in your practice!\n提示：错题单词已经在练习中优先出现了！');
+  switchModeByName('spell');
+}
+
+// === Word picker ===
 function pickWord() {
   const now = Date.now();
   const cands = [];
@@ -275,21 +390,65 @@ function pickWord() {
     const s = ws(v.w);
     const st = getStatus(v.w);
     if (st === 'mastered') continue;
-    const pri = st === 'learning' ? 0 : 1;
+    // Wrong book words get highest priority
+    let pri;
+    if (wrongBook[v.w]) pri = -1;
+    else if (st === 'learning') pri = 0;
+    else pri = 1;
     cands.push({ v, pri, age: now - (s.t||0) });
   }
-  if (!cands.length) return VOCAB[Math.floor(Math.random()*VOCAB.length)]; // all mastered
+  if (!cands.length) return VOCAB[Math.floor(Math.random()*VOCAB.length)];
   cands.sort((a,b) => a.pri !== b.pri ? a.pri - b.pri : b.age - a.age);
   const pool = cands.slice(0, Math.min(6, cands.length));
   return pool[Math.floor(Math.random()*pool.length)].v;
 }
 
-// Get English def (fallback to Chinese if no English def)
 function enDef(v) { return v.e || v.m; }
+
+// === GO BACK ===
+function saveSnapshot() {
+  return JSON.parse(JSON.stringify(state));
+}
+
+function goBack() {
+  if (!previousWord) return;
+  // Restore state
+  if (previousState) {
+    state = previousState;
+    saveState();
+  }
+  // Remove from wrong book if it was added this round
+  // (we'll just reload the previous word)
+  currentWord = previousWord;
+  previousWord = null;
+  previousState = null;
+  
+  if (currentMode === 'spell') restoreSpell();
+  else if (currentMode === 'match') restoreMatch();
+  else if (currentMode === 'quiz') restoreQuiz();
+  
+  updateStats();
+  renderWrongSidebar();
+}
+
+function restoreSpell() {
+  hintLevel = 0; spellChecked = false;
+  document.getElementById('spell-en').textContent = enDef(currentWord);
+  document.getElementById('spell-cn').textContent = currentWord.m;
+  document.getElementById('spell-hint').textContent = `( ${currentWord.w.length} letters )`;
+  document.getElementById('spell-input').value = '';
+  document.getElementById('spell-input').className = '';
+  document.getElementById('spell-feedback').innerHTML = '<span style="color:var(--warning)">⬅️ Went back · 已返回上一题</span>';
+  document.getElementById('spell-reveal').innerHTML = '';
+  document.getElementById('spell-input').focus();
+}
 
 // === SPELL MODE ===
 function loadSpell() {
-  currentWord = pickWord(); hintLevel = 0;
+  previousWord = currentWord;
+  previousState = saveSnapshot();
+  currentWord = pickWord();
+  hintLevel = 0; spellChecked = false;
   document.getElementById('spell-en').textContent = enDef(currentWord);
   document.getElementById('spell-cn').textContent = currentWord.m;
   document.getElementById('spell-hint').textContent = `( ${currentWord.w.length} letters )`;
@@ -298,25 +457,27 @@ function loadSpell() {
   document.getElementById('spell-feedback').innerHTML = '';
   document.getElementById('spell-reveal').innerHTML = '';
   document.getElementById('spell-input').focus();
-  // Don't auto-speak in spell mode (they need to figure out the word!)
 }
 
 function checkSpelling() {
   const inp = document.getElementById('spell-input').value.trim().toLowerCase();
+  if (!inp) return;
   const correct = currentWord.w.toLowerCase();
   const s = ws(currentWord.w); s.att++; s.t = Date.now();
+  spellChecked = true;
 
   if (inp === correct) {
     s.sp++;
     document.getElementById('spell-input').className = 'correct';
     document.getElementById('spell-feedback').innerHTML = '<span class="correct">✅ Correct! 正确！</span>';
-    speak(currentWord.w, 'en-US'); // read the word aloud on correct
+    speak(currentWord.w, 'en-US');
     saveState(); updateStats();
     setTimeout(loadSpell, 1500);
   } else {
     s.sp = Math.max(0, s.sp - 1);
     document.getElementById('spell-input').className = 'wrong';
-    document.getElementById('spell-feedback').innerHTML = '<span class="wrong">❌ Try again! 再试一次！</span>';
+    document.getElementById('spell-feedback').innerHTML = `<span class="wrong">❌ Try again! 再试一次！ (Answer: ${currentWord.w})</span>`;
+    addToWrongBook(currentWord); // add to wrong book on first wrong attempt
     saveState(); updateStats();
   }
 }
@@ -326,40 +487,40 @@ function showHint() {
   hintLevel++;
   const w = currentWord.w;
   let hint;
-  if (hintLevel === 1) {
-    hint = w[0] + ' _ '.repeat(w.length - 2).trim() + ' ' + w[w.length-1];
-  } else if (hintLevel === 2) {
-    hint = w.split('').map((c,i) => i%2===0?c:'_').join(' ');
-  } else {
-    const hide = Math.floor(Math.random()*(w.length-2))+1;
-    hint = w.split('').map((c,i) => i===hide?'_':c).join(' ');
-  }
+  if (hintLevel === 1) hint = w[0] + ' _ '.repeat(w.length-2).trim() + ' ' + w[w.length-1];
+  else if (hintLevel === 2) hint = w.split('').map((c,i) => i%2===0?c:'_').join(' ');
+  else { const h=Math.floor(Math.random()*(w.length-2))+1; hint=w.split('').map((c,i) => i===h?'_':c).join(' '); }
   document.getElementById('spell-hint').textContent = hint;
 }
 
 function revealAnswer() {
   if (!currentWord) return;
   document.getElementById('spell-reveal').innerHTML = `<span class="reveal-word">${currentWord.w}</span>`;
+  speak(currentWord.w, 'en-US');
+  if (!spellChecked) {
+    // User revealed without trying — counts as wrong
+    addToWrongBook(currentWord);
+  }
   const s = ws(currentWord.w); s.sp = Math.max(0, s.sp-1); s.att++; s.t = Date.now();
   saveState(); updateStats();
 }
 
 function nextSpell() { loadSpell(); }
 
-// === MATCH MODE: see definition → pick word ===
+// === MATCH MODE ===
 function loadMatch() {
+  previousWord = currentWord;
+  previousState = saveSnapshot();
   currentWord = pickWord(); answered = false;
   document.getElementById('match-en').textContent = enDef(currentWord);
   document.getElementById('match-cn').textContent = currentWord.m;
   document.getElementById('match-feedback').innerHTML = '';
   document.getElementById('match-next').style.display = 'none';
-  autoSpeak(); // read the word aloud
+  autoSpeak();
 
-  // 4 word options
   const correctW = currentWord.w;
   const wrongs = [];
   const pool = VOCAB.filter(v => v.w !== correctW);
-  // Pick words of similar length for difficulty
   const len = correctW.length;
   pool.sort((a,b) => Math.abs(a.w.length-len) - Math.abs(b.w.length-len));
   const similar = pool.slice(0, Math.min(30, pool.length));
@@ -368,16 +529,37 @@ function loadMatch() {
     wrongs.push(similar[idx].w);
     similar.splice(idx,1);
   }
-
-  const opts = [correctW, ...wrongs];
-  shuffle(opts);
-
+  const opts = [correctW, ...wrongs]; shuffle(opts);
   const container = document.getElementById('match-options');
   container.innerHTML = '';
   opts.forEach(w => {
     const btn = document.createElement('div');
-    btn.className = 'option';
-    btn.textContent = w;
+    btn.className = 'option'; btn.textContent = w;
+    btn.onclick = () => selectMatch(btn, w, correctW);
+    container.appendChild(btn);
+  });
+}
+
+function restoreMatch() {
+  answered = false;
+  document.getElementById('match-en').textContent = enDef(currentWord);
+  document.getElementById('match-cn').textContent = currentWord.m;
+  document.getElementById('match-feedback').innerHTML = '<span style="color:var(--warning)">⬅️ Went back · 已返回上一题</span>';
+  document.getElementById('match-next').style.display = 'none';
+  const correctW = currentWord.w;
+  const wrongs = [];
+  const pool = VOCAB.filter(v => v.w !== correctW);
+  const len = correctW.length;
+  pool.sort((a,b) => Math.abs(a.w.length-len) - Math.abs(b.w.length-len));
+  const similar = pool.slice(0, Math.min(30, pool.length));
+  while (wrongs.length < 3 && similar.length > 0) {
+    const idx = Math.floor(Math.random()*similar.length); wrongs.push(similar[idx].w); similar.splice(idx,1);
+  }
+  const opts = [correctW, ...wrongs]; shuffle(opts);
+  const container = document.getElementById('match-options');
+  container.innerHTML = '';
+  opts.forEach(w => {
+    const btn = document.createElement('div'); btn.className = 'option'; btn.textContent = w;
     btn.onclick = () => selectMatch(btn, w, correctW);
     container.appendChild(btn);
   });
@@ -388,14 +570,14 @@ function selectMatch(btn, selected, correct) {
   answered = true;
   document.querySelectorAll('#match-options .option').forEach(o => o.classList.add('disabled'));
   const s = ws(currentWord.w); s.att++; s.t = Date.now();
-
   if (selected === correct) {
     s.ma++; btn.classList.add('correct');
     document.getElementById('match-feedback').innerHTML = '<span class="correct">✅ Correct! 正确！</span>';
   } else {
     s.ma = Math.max(0, s.ma-1); btn.classList.add('wrong');
     document.querySelectorAll('#match-options .option').forEach(o => { if(o.textContent===correct) o.classList.add('correct'); });
-    document.getElementById('match-feedback').innerHTML = `<span class="wrong">❌ The answer is: <strong>${correct}</strong></span>`;
+    document.getElementById('match-feedback').innerHTML = `<span class="wrong">❌ Answer: <strong>${correct}</strong></span>`;
+    addToWrongBook(currentWord);
   }
   saveState(); updateStats();
   document.getElementById('match-next').style.display = 'inline-block';
@@ -403,35 +585,56 @@ function selectMatch(btn, selected, correct) {
 
 function nextMatch() { loadMatch(); }
 
-// === QUIZ MODE: see word → pick meaning ===
+// === QUIZ MODE ===
 function loadQuiz() {
+  previousWord = currentWord;
+  previousState = saveSnapshot();
   currentWord = pickWord(); answered = false;
   document.getElementById('quiz-word').textContent = currentWord.w;
   document.getElementById('quiz-feedback').innerHTML = '';
   document.getElementById('quiz-next').style.display = 'none';
-  autoSpeak(); // read the word aloud
+  autoSpeak();
 
-  const correctM = currentWord.m;
-  const correctE = enDef(currentWord);
+  const correctM = currentWord.m, correctE = enDef(currentWord);
   const wrongs = [];
   const pool = VOCAB.filter(v => v.w !== currentWord.w);
   while (wrongs.length < 3 && pool.length > 0) {
     const idx = Math.floor(Math.random()*pool.length);
     const v = pool[idx];
-    if (!wrongs.find(x => x.m === v.m)) {
-      wrongs.push({ m: v.m, e: enDef(v) });
-    }
+    if (!wrongs.find(x => x.m === v.m)) wrongs.push({ m: v.m, e: enDef(v) });
     pool.splice(idx,1);
   }
-
-  const opts = [{ m: correctM, e: correctE, correct: true }, ...wrongs.map(x => ({...x, correct:false}))];
+  const opts = [{ m:correctM, e:correctE, correct:true }, ...wrongs.map(x=>({...x,correct:false}))];
   shuffle(opts);
-
   const container = document.getElementById('quiz-options');
   container.innerHTML = '';
   opts.forEach(opt => {
-    const btn = document.createElement('div');
-    btn.className = 'option';
+    const btn = document.createElement('div'); btn.className = 'option';
+    btn.innerHTML = `<div class="opt-en">${opt.e}</div><div class="opt-cn">${opt.m}</div>`;
+    btn.onclick = () => selectQuiz(btn, opt.correct, correctE, correctM);
+    container.appendChild(btn);
+  });
+}
+
+function restoreQuiz() {
+  answered = false;
+  document.getElementById('quiz-word').textContent = currentWord.w;
+  document.getElementById('quiz-feedback').innerHTML = '<span style="color:var(--warning)">⬅️ Went back · 已返回上一题</span>';
+  document.getElementById('quiz-next').style.display = 'none';
+  const correctM = currentWord.m, correctE = enDef(currentWord);
+  const wrongs = [];
+  const pool = VOCAB.filter(v => v.w !== currentWord.w);
+  while (wrongs.length < 3 && pool.length > 0) {
+    const idx = Math.floor(Math.random()*pool.length); const v = pool[idx];
+    if (!wrongs.find(x => x.m === v.m)) wrongs.push({ m: v.m, e: enDef(v) });
+    pool.splice(idx,1);
+  }
+  const opts = [{ m:correctM, e:correctE, correct:true }, ...wrongs.map(x=>({...x,correct:false}))];
+  shuffle(opts);
+  const container = document.getElementById('quiz-options');
+  container.innerHTML = '';
+  opts.forEach(opt => {
+    const btn = document.createElement('div'); btn.className = 'option';
     btn.innerHTML = `<div class="opt-en">${opt.e}</div><div class="opt-cn">${opt.m}</div>`;
     btn.onclick = () => selectQuiz(btn, opt.correct, correctE, correctM);
     container.appendChild(btn);
@@ -443,7 +646,6 @@ function selectQuiz(btn, isCorrect, correctE, correctM) {
   answered = true;
   document.querySelectorAll('#quiz-options .option').forEach(o => o.classList.add('disabled'));
   const s = ws(currentWord.w); s.att++; s.t = Date.now();
-
   if (isCorrect) {
     s.qu++; btn.classList.add('correct');
     document.getElementById('quiz-feedback').innerHTML = '<span class="correct">✅ Correct! 正确！</span>';
@@ -453,6 +655,7 @@ function selectQuiz(btn, isCorrect, correctE, correctM) {
       if (o.querySelector('.opt-en').textContent === correctE) o.classList.add('correct');
     });
     document.getElementById('quiz-feedback').innerHTML = `<span class="wrong">❌ Answer: ${correctE} / ${correctM}</span>`;
+    addToWrongBook(currentWord);
   }
   saveState(); updateStats();
   document.getElementById('quiz-next').style.display = 'inline-block';
@@ -462,7 +665,6 @@ function nextQuiz() { loadQuiz(); }
 
 // === WORD LIST ===
 function renderList() {
-  const container = document.getElementById('word-list');
   const sorted = [...VOCAB].sort((a,b) => a.w.localeCompare(b.w));
   let html = '';
   for (const v of sorted) {
@@ -472,14 +674,15 @@ function renderList() {
     if (st==='mastered'){bc='badge-mastered';bt='✅ Mastered';}
     else if(st==='learning'){bc='badge-learning';bt='📝 Learning';}
     else{bc='badge-new';bt='🆕 New';}
+    const inWrong = wrongBook[v.w] ? `<span style="color:var(--danger);font-size:0.7rem"> ×${wrongBook[v.w].count}</span>` : '';
     html += `<div class="word-item">
       <button class="speak-btn small" onclick="speak('${v.w}','en-US')">🔊</button>
-      <div class="wi-left"><span class="eng">${v.w}</span><br>
+      <div class="wi-left"><span class="eng">${v.w}</span>${inWrong}<br>
       <span class="def">${enDef(v)} · ${v.m}</span></div>
       <span class="badge ${bc}">${bt}</span></div>`;
   }
-  if(!html) html = '<div style="padding:20px;text-align:center;color:var(--muted)">No words found 没有符合条件的单词</div>';
-  container.innerHTML = html;
+  if(!html) html = '<div style="padding:20px;text-align:center;color:var(--muted)">No words found</div>';
+  document.getElementById('word-list').innerHTML = html;
 }
 
 function filterList(f, el) {
@@ -490,59 +693,38 @@ function filterList(f, el) {
 }
 
 function resetProgress() {
-  if (confirm('Reset all progress? 确定要重置所有学习进度吗？')) {
-    state = {}; saveState(); updateStats(); init();
+  if (confirm('Reset ALL progress? 确定重置所有进度？')) {
+    state = {}; wrongBook = {};
+    saveState(); saveWrongBook(); updateStats(); init();
   }
 }
 
 // === TTS ===
 let voices = [];
-function loadVoices() {
-  voices = speechSynthesis.getVoices();
-}
-speechSynthesis.onvoiceschanged = loadVoices;
-loadVoices();
+function loadVoices() { voices = speechSynthesis.getVoices(); }
+speechSynthesis.onvoiceschanged = loadVoices; loadVoices();
 
 function getEnVoice() {
-  // Prefer native English voices
   return voices.find(v => v.lang.startsWith('en') && v.name.includes('Google')) ||
-         voices.find(v => v.lang.startsWith('en-US')) ||
-         voices.find(v => v.lang.startsWith('en-AU')) ||
-         voices.find(v => v.lang.startsWith('en')) ||
-         null;
+    voices.find(v => v.lang.startsWith('en-US')) ||
+    voices.find(v => v.lang.startsWith('en-AU')) ||
+    voices.find(v => v.lang.startsWith('en')) || null;
 }
 
 function speak(text, lang) {
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = lang || 'en-US';
-  u.rate = 0.85; // slightly slower for kids
-  u.pitch = 1;
+  u.lang = lang || 'en-US'; u.rate = 0.85;
   const v = getEnVoice();
   if (v && (lang||'en').startsWith('en')) u.voice = v;
   speechSynthesis.speak(u);
 }
 
-function speakWord() {
-  if (currentWord) speak(currentWord.w, 'en-US');
-}
-
-function speakSlow() {
-  if (!currentWord) return;
-  speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(currentWord.w);
-  u.lang = 'en-US';
-  u.rate = 0.55; // very slow
-  const v = getEnVoice();
-  if (v) u.voice = v;
-  speechSynthesis.speak(u);
-}
+function speakWord() { if (currentWord) speak(currentWord.w, 'en-US'); }
 
 function autoSpeak() {
   const cb = document.getElementById('auto-speak');
-  if (cb && cb.checked && currentWord) {
-    setTimeout(() => speak(currentWord.w, 'en-US'), 300);
-  }
+  if (cb && cb.checked && currentWord) setTimeout(() => speak(currentWord.w, 'en-US'), 300);
 }
 
 // === Helpers ===
@@ -550,28 +732,43 @@ function shuffle(arr) {
   for (let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
 }
 
-function switchMode(mode) {
+function switchModeByName(mode) {
   currentMode = mode;
-  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-  ['spell','match','quiz','list'].forEach(m => {
-    document.getElementById('mode-'+m).style.display = m===mode?'block':'none';
+  document.querySelectorAll('.nav button').forEach(b => {
+    b.classList.toggle('active', b.textContent.toLowerCase().includes(mode));
+  });
+  ['spell','match','quiz','list','wrong'].forEach(m => {
+    const el = document.getElementById('mode-'+m);
+    if (el) el.style.display = m===mode?'block':'none';
   });
   if (mode==='spell') loadSpell();
   else if (mode==='match') loadMatch();
   else if (mode==='quiz') loadQuiz();
-  else renderList();
+  else if (mode==='list') renderList();
+  else if (mode==='wrong') renderWrongFullList();
+}
+
+function switchMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  ['spell','match','quiz','list','wrong'].forEach(m => {
+    const el = document.getElementById('mode-'+m);
+    if (el) el.style.display = m===mode?'block':'none';
+  });
+  if (mode==='spell') loadSpell();
+  else if (mode==='match') loadMatch();
+  else if (mode==='quiz') loadQuiz();
+  else if (mode==='list') renderList();
+  else if (mode==='wrong') renderWrongFullList();
 }
 
 function init() {
   updateStats();
-  if (currentMode==='spell') loadSpell();
-  else if (currentMode==='match') loadMatch();
-  else if (currentMode==='quiz') loadQuiz();
-  else renderList();
+  renderWrongSidebar();
+  loadSpell();
 }
 
-// Keyboard
 document.addEventListener('keydown', e => {
   if (currentMode==='spell' && e.key==='Enter') checkSpelling();
 });
