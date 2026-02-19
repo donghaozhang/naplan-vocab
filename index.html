@@ -146,6 +146,56 @@ body{font-family:'Nunito',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif
 @keyframes shakeX{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
 .shake{animation:shakeX 0.4s ease}
 
+/* === GAMIFICATION === */
+.game-bar{display:flex;justify-content:center;align-items:center;gap:20px;padding:10px 16px;background:linear-gradient(135deg,#1a1a2e,#16213e);border-bottom:2px solid #0f3460;flex-wrap:wrap}
+.hearts{display:flex;gap:4px;align-items:center}
+.heart{font-size:1.6rem;transition:all .3s;display:inline-block}
+.heart.lost{filter:grayscale(1);opacity:0.4}
+.heart.breaking{animation:heartBreak 0.6s ease-out forwards}
+@keyframes heartBreak{0%{transform:scale(1)}20%{transform:scale(1.3)}40%{transform:scale(0.8) rotate(-10deg)}60%{transform:scale(0.6) rotate(10deg);opacity:0.5}100%{transform:scale(0.4) translateY(10px);opacity:0.3;filter:grayscale(1)}}
+.heart.gained{animation:heartGain 0.5s ease-out}
+@keyframes heartGain{0%{transform:scale(0.3);opacity:0}50%{transform:scale(1.4)}100%{transform:scale(1);opacity:1}}
+.game-score{font-size:1.5rem;font-weight:900;color:#FFC800;text-shadow:0 0 10px rgba(255,200,0,0.5);font-family:'Nunito',sans-serif;min-width:80px;text-align:center}
+.game-combo{font-size:1.2rem;font-weight:800;color:#ff6b35;min-width:60px;text-align:center;transition:all .3s}
+.game-combo.hot{color:#ff4500;text-shadow:0 0 15px rgba(255,69,0,0.7);animation:comboPulse 0.5s ease infinite}
+@keyframes comboPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+
+/* Flash overlays */
+.flash-overlay{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:9998;opacity:0;transition:opacity 0.15s}
+.flash-green{background:radial-gradient(circle,rgba(88,204,2,0.3),rgba(88,204,2,0.1));animation:flashIn 0.4s ease-out}
+.flash-red{background:radial-gradient(circle,rgba(255,75,75,0.3),rgba(255,75,75,0.1));animation:flashIn 0.4s ease-out}
+@keyframes flashIn{0%{opacity:1}100%{opacity:0}}
+
+/* Star particles */
+.star-particle{position:fixed;font-size:1.5rem;z-index:9997;pointer-events:none;animation:starFall 1.2s ease-out forwards}
+@keyframes starFall{0%{opacity:1;transform:translateY(-20px) rotate(0deg) scale(1)}100%{opacity:0;transform:translateY(100vh) rotate(360deg) scale(0.3)}}
+
+/* Bomb explosion */
+.bomb-container{position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;pointer-events:none;display:flex;align-items:center;justify-content:center}
+.bomb-emoji{font-size:5rem;animation:bombExplode 0.8s ease-out forwards}
+@keyframes bombExplode{0%{transform:scale(0.5);opacity:1}30%{transform:scale(1.5)}50%{transform:scale(2);opacity:1}100%{transform:scale(3);opacity:0}}
+.bomb-fragment{position:fixed;font-size:1.5rem;z-index:9999;pointer-events:none;animation:fragmentFly 0.8s ease-out forwards}
+@keyframes fragmentFly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--fx),var(--fy)) scale(0.3) rotate(720deg)}}
+
+/* Fire border */
+.fire-border{box-shadow:0 0 15px rgba(255,69,0,0.5),inset 0 0 15px rgba(255,69,0,0.1) !important;animation:fireBorder 1s ease infinite alternate}
+@keyframes fireBorder{0%{box-shadow:0 0 15px rgba(255,69,0,0.5),inset 0 0 15px rgba(255,69,0,0.1)}100%{box-shadow:0 0 25px rgba(255,100,0,0.7),inset 0 0 20px rgba(255,69,0,0.2)}}
+
+/* Rainbow border for 10+ combo */
+.rainbow-border{animation:rainbowBorder 1.5s linear infinite !important}
+@keyframes rainbowBorder{0%{box-shadow:0 0 20px #ff0000}14%{box-shadow:0 0 20px #ff7f00}28%{box-shadow:0 0 20px #ffff00}42%{box-shadow:0 0 20px #00ff00}57%{box-shadow:0 0 20px #0000ff}71%{box-shadow:0 0 20px #4b0082}85%{box-shadow:0 0 20px #9400d3}100%{box-shadow:0 0 20px #ff0000}}
+
+/* Game Over overlay */
+.game-over-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:10000;display:flex;align-items:center;justify-content:center;animation:fadeIn 0.5s ease;pointer-events:none}
+@keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
+.game-over-card{background:#fff;border-radius:24px;padding:40px;text-align:center;max-width:380px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.5);animation:cardSlideUp 0.5s ease-out;pointer-events:auto}
+@keyframes cardSlideUp{0%{transform:translateY(40px);opacity:0}100%{transform:translateY(0);opacity:1}}
+.game-over-card h2{font-size:2rem;margin-bottom:8px;color:var(--danger)}
+.game-over-card .go-emoji{font-size:4rem;margin-bottom:12px}
+.game-over-card .go-stats{margin:16px 0;font-size:1rem;color:var(--text);line-height:2}
+.game-over-card .go-stats strong{font-size:1.3rem;color:var(--primary)}
+.game-over-card .go-stats .go-score{font-size:1.5rem;color:var(--gold);font-weight:900}
+
 @media(max-width:760px){
   .layout{flex-direction:column}
   .side-col{width:100%}
@@ -179,6 +229,18 @@ body{font-family:'Nunito',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif
   <div class="stat"><div class="stat-num" id="s-new">0</div><div class="stat-label">New 🆕</div></div>
   <div class="stat"><div class="stat-num red" id="s-wrong">0</div><div class="stat-label">Wrong ❌</div></div>
   <div class="stat"><div class="stat-num" id="s-total">0</div><div class="stat-label">Total</div></div>
+</div>
+
+<div class="game-bar" id="game-bar">
+  <div class="hearts" id="hearts">
+    <span class="heart" data-i="0">❤️</span>
+    <span class="heart" data-i="1">❤️</span>
+    <span class="heart" data-i="2">❤️</span>
+    <span class="heart" data-i="3">❤️</span>
+    <span class="heart" data-i="4">❤️</span>
+  </div>
+  <div class="game-score" id="game-score">🏆 0</div>
+  <div class="game-combo" id="game-combo"></div>
 </div>
 
 <div class="nav">
@@ -329,6 +391,183 @@ let timerStart = 0;
 const TIMER_SECONDS = 15;
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
+// === Gamification State ===
+let gameHP = 5;
+let gameScore = 0;
+let gameStreak = 0;
+let gameBestStreak = 0;
+let gameCorrectCount = 0;
+let gameOverTimeout = null;
+
+function resetGame() {
+  if (gameOverTimeout) { clearTimeout(gameOverTimeout); gameOverTimeout = null; }
+  gameHP = 5; gameScore = 0; gameStreak = 0; gameBestStreak = 0; gameCorrectCount = 0;
+  renderHearts(); updateScoreUI(); updateComboUI();
+  const overlay = document.getElementById('game-over-overlay');
+  if (overlay) overlay.remove();
+}
+
+function renderHearts() {
+  const hearts = document.querySelectorAll('#hearts .heart');
+  hearts.forEach((h, i) => {
+    if (i < gameHP) { h.textContent = '❤️'; h.classList.remove('lost'); }
+    else { h.textContent = '🩶'; h.classList.add('lost'); }
+  });
+}
+
+function loseHeart() {
+  if (gameHP <= 0) return;
+  gameHP--;
+  const hearts = document.querySelectorAll('#hearts .heart');
+  const h = hearts[gameHP];
+  h.classList.add('breaking');
+  setTimeout(() => { h.classList.remove('breaking'); h.classList.add('lost'); h.textContent = '🩶'; }, 600);
+  gameStreak = 0; updateComboUI(); updateFireBorder();
+  showBombExplosion(); showFlash('red');
+  if (gameHP <= 0) gameOverTimeout = setTimeout(showGameOver, 1000);
+}
+
+function gainHeart() {
+  if (gameHP >= 5) return;
+  const hearts = document.querySelectorAll('#hearts .heart');
+  const h = hearts[gameHP];
+  gameHP++;
+  h.textContent = '❤️'; h.classList.remove('lost');
+  h.classList.add('gained');
+  setTimeout(() => h.classList.remove('gained'), 500);
+}
+
+function addScore(isCorrect) {
+  if (!isCorrect) return;
+  gameCorrectCount++;
+  gameStreak++;
+  if (gameStreak > gameBestStreak) gameBestStreak = gameStreak;
+  const points = 10 * gameStreak;
+  gameScore += points;
+  updateScoreUI(); updateComboUI(); updateFireBorder();
+  showFlash('green'); showStarParticles();
+  gainHeart();
+}
+
+function onWrongAnswer() {
+  loseHeart();
+}
+
+function updateScoreUI() {
+  document.getElementById('game-score').textContent = '🏆 ' + gameScore;
+}
+
+function updateComboUI() {
+  const el = document.getElementById('game-combo');
+  if (gameStreak >= 2) {
+    el.textContent = '🔥x' + gameStreak;
+    el.classList.toggle('hot', gameStreak >= 5);
+  } else {
+    el.textContent = '';
+    el.classList.remove('hot');
+  }
+}
+
+function updateFireBorder() {
+  const cards = document.querySelectorAll('.main-col .card');
+  cards.forEach(c => { c.classList.remove('fire-border','rainbow-border'); });
+  if (gameStreak >= 10) cards.forEach(c => c.classList.add('rainbow-border'));
+  else if (gameStreak >= 5) cards.forEach(c => c.classList.add('fire-border'));
+}
+
+function showFlash(color) {
+  const el = document.createElement('div');
+  el.className = 'flash-overlay flash-' + color;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 500);
+}
+
+function showStarParticles() {
+  for (let i = 0; i < 8; i++) {
+    const s = document.createElement('div');
+    s.className = 'star-particle';
+    s.textContent = ['⭐','🌟','✨'][Math.floor(Math.random()*3)];
+    s.style.left = (10 + Math.random()*80) + '%';
+    s.style.top = '-20px';
+    s.style.animationDelay = (Math.random()*0.4) + 's';
+    s.style.fontSize = (1 + Math.random()*1.5) + 'rem';
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 1600);
+  }
+}
+
+function showBombExplosion() {
+  const container = document.createElement('div');
+  container.className = 'bomb-container';
+  container.innerHTML = '<div class="bomb-emoji">💣</div>';
+  document.body.appendChild(container);
+  // Play explosion sound
+  playExplosionSound();
+  // Fragments after 300ms
+  setTimeout(() => {
+    const fragments = ['💥','🔥','💫','⚡','💢','✨'];
+    for (let i = 0; i < 10; i++) {
+      const f = document.createElement('div');
+      f.className = 'bomb-fragment';
+      f.textContent = fragments[Math.floor(Math.random()*fragments.length)];
+      const angle = (Math.PI * 2 * i) / 10;
+      const dist = 100 + Math.random()*150;
+      f.style.left = '50%'; f.style.top = '50%';
+      f.style.setProperty('--fx', Math.cos(angle)*dist + 'px');
+      f.style.setProperty('--fy', Math.sin(angle)*dist + 'px');
+      document.body.appendChild(f);
+      setTimeout(() => f.remove(), 900);
+    }
+  }, 300);
+  setTimeout(() => container.remove(), 900);
+}
+
+function playExplosionSound() {
+  const now = audioCtx.currentTime;
+  // White noise burst
+  const bufferSize = audioCtx.sampleRate * 0.3;
+  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) data[i] = (Math.random()*2-1) * Math.pow(1 - i/bufferSize, 2);
+  const src = audioCtx.createBufferSource();
+  src.buffer = buffer;
+  const gain = audioCtx.createGain();
+  gain.gain.setValueAtTime(0.3, now);
+  gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = 'lowpass'; filter.frequency.value = 800;
+  src.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
+  src.start(now);
+}
+
+function dismissGameOver() {
+  const overlay = document.getElementById('game-over-overlay');
+  if (overlay) overlay.remove();
+}
+
+function autoResetIfDead() {
+  if (gameHP <= 0) { resetGame(); return true; }
+  return false;
+}
+
+function showGameOver() {
+  stopTimer();
+  const overlay = document.createElement('div');
+  overlay.className = 'game-over-overlay';
+  overlay.id = 'game-over-overlay';
+  overlay.innerHTML = `<div class="game-over-card">
+    <div class="go-emoji">💀</div>
+    <h2>Game Over!</h2>
+    <div class="go-stats">
+      <div>Score 得分: <span class="go-score">${gameScore}</span></div>
+      <div>Correct 答对: <strong>${gameCorrectCount}</strong></div>
+      <div>Best Streak 最佳连击: <strong>🔥${gameBestStreak}</strong></div>
+    </div>
+    <button class="btn btn-primary" onclick="resetGame();init();" style="margin-top:16px;font-size:1.1rem;padding:14px 36px">🔄 Play Again 再来一局</button>
+  </div>`;
+  document.body.appendChild(overlay);
+}
+
 // === Sound Effects (Web Audio API) ===
 function playCorrectSound() {
   // Happy ascending chime 🎵
@@ -414,16 +653,18 @@ function handleTimeUp() {
   if (currentMode === 'spell' && !spellChecked) {
     document.getElementById('spell-feedback').innerHTML = '<span class="wrong">⏰ Time up! 时间到! Answer: ' + currentWord.w + '</span>';
     document.getElementById('spell-input').className = 'wrong';
+    onWrongAnswer();
     addToWrongBook(currentWord);
     const s = ws(currentWord.w); s.att++; s.t = Date.now();
     saveState(); updateStats();
     document.querySelector('.main-col .card')?.classList.add('shake');
     setTimeout(() => document.querySelector('.main-col .card')?.classList.remove('shake'), 500);
-    setTimeout(loadSpell, 2000);
+    setTimeout(() => { if (gameHP > 0) loadSpell(); }, 2000);
   } else if (currentMode === 'match' && !answered) {
     answered = true;
     document.getElementById('match-feedback').innerHTML = '<span class="wrong">⏰ Time up! Answer: ' + currentWord.w + '</span>';
     document.querySelectorAll('#match-options .option').forEach(o => { o.classList.add('disabled'); if(o.textContent===currentWord.w) o.classList.add('correct'); });
+    onWrongAnswer();
     addToWrongBook(currentWord);
     const s = ws(currentWord.w); s.att++; s.t = Date.now();
     saveState(); updateStats();
@@ -432,6 +673,7 @@ function handleTimeUp() {
     answered = true;
     document.getElementById('quiz-feedback').innerHTML = '<span class="wrong">⏰ Time up! Answer: ' + enDef(currentWord) + ' / ' + currentWord.m + '</span>';
     document.querySelectorAll('#quiz-options .option').forEach(o => { o.classList.add('disabled'); if(o.querySelector('.opt-en')?.textContent===enDef(currentWord)) o.classList.add('correct'); });
+    onWrongAnswer();
     addToWrongBook(currentWord);
     const s = ws(currentWord.w); s.att++; s.t = Date.now();
     saveState(); updateStats();
@@ -686,14 +928,16 @@ function checkSpelling() {
     document.getElementById('spell-input').className = 'correct';
     document.getElementById('spell-feedback').innerHTML = '<span class="correct">✅ Correct! 正确!</span>';
     playCorrectSound(); showRewardEmoji(true);
+    addScore(true);
     speak(currentWord.w, 'en-US');
     saveState(); updateStats();
-    setTimeout(loadSpell, 1500);
+    setTimeout(() => { if (gameHP > 0) loadSpell(); }, 1500);
   } else {
     s.sp = Math.max(0, s.sp - 1);
     document.getElementById('spell-input').className = 'wrong';
     document.getElementById('spell-feedback').innerHTML = `<span class="wrong">❌ Try again! 再试一次! (Answer: ${currentWord.w})</span>`;
     playWrongSound(); showRewardEmoji(false);
+    onWrongAnswer();
     document.querySelector('.main-col .card')?.classList.add('shake');
     setTimeout(() => document.querySelector('.main-col .card')?.classList.remove('shake'), 500);
     addToWrongBook(currentWord);
@@ -724,7 +968,7 @@ function revealAnswer() {
   saveState(); updateStats();
 }
 
-function nextSpell() { loadSpell(); }
+function nextSpell() { autoResetIfDead(); dismissGameOver(); loadSpell(); }
 
 // === MATCH MODE ===
 function loadMatch() {
@@ -795,18 +1039,20 @@ function selectMatch(btn, selected, correct) {
     s.ma++; btn.classList.add('correct');
     document.getElementById('match-feedback').innerHTML = '<span class="correct">✅ Correct! 正确!</span>';
     playCorrectSound(); showRewardEmoji(true);
+    addScore(true);
   } else {
     s.ma = Math.max(0, s.ma-1); btn.classList.add('wrong');
     document.querySelectorAll('#match-options .option').forEach(o => { if(o.textContent===correct) o.classList.add('correct'); });
     document.getElementById('match-feedback').innerHTML = `<span class="wrong">❌ Answer: <strong>${correct}</strong></span>`;
     playWrongSound(); showRewardEmoji(false);
+    onWrongAnswer();
     addToWrongBook(currentWord);
   }
   saveState(); updateStats();
   document.getElementById('match-next').style.display = 'inline-block';
 }
 
-function nextMatch() { loadMatch(); }
+function nextMatch() { autoResetIfDead(); dismissGameOver(); loadMatch(); }
 
 // === QUIZ MODE ===
 function loadQuiz() {
@@ -875,6 +1121,7 @@ function selectQuiz(btn, isCorrect, correctE, correctM) {
     s.qu++; btn.classList.add('correct');
     document.getElementById('quiz-feedback').innerHTML = '<span class="correct">✅ Correct! 正确!</span>';
     playCorrectSound(); showRewardEmoji(true);
+    addScore(true);
   } else {
     s.qu = Math.max(0, s.qu-1); btn.classList.add('wrong');
     document.querySelectorAll('#quiz-options .option').forEach(o => {
@@ -882,13 +1129,14 @@ function selectQuiz(btn, isCorrect, correctE, correctM) {
     });
     document.getElementById('quiz-feedback').innerHTML = `<span class="wrong">❌ Answer: ${correctE} / ${correctM}</span>`;
     playWrongSound(); showRewardEmoji(false);
+    onWrongAnswer();
     addToWrongBook(currentWord);
   }
   saveState(); updateStats();
   document.getElementById('quiz-next').style.display = 'inline-block';
 }
 
-function nextQuiz() { loadQuiz(); }
+function nextQuiz() { autoResetIfDead(); dismissGameOver(); loadQuiz(); }
 
 // === WORD LIST ===
 function levelBadge(v) {
