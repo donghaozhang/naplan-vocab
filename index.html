@@ -126,6 +126,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .reveal-word{font-size:1.4rem;font-weight:800;color:var(--danger)}
 .reset-section{margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
 
+/* Timer bar */
+.timer-bar{position:fixed;bottom:0;left:0;right:0;height:10px;background:var(--border);z-index:999}
+.timer-fill{height:100%;border-radius:0 4px 4px 0;transition:width 0.1s linear;background:linear-gradient(90deg,#22c55e,#eab308,#ef4444)}
+.timer-label{position:fixed;bottom:12px;right:12px;font-size:0.75rem;font-weight:800;color:var(--muted);z-index:1000;background:rgba(255,255,255,0.9);padding:2px 8px;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,0.1)}
+/* Reward flash */
+@keyframes rewardPop{0%{transform:scale(0.5);opacity:0}50%{transform:scale(1.3)}100%{transform:scale(1);opacity:1}}
+@keyframes rewardFade{0%{opacity:1}100%{opacity:0;transform:translateY(-30px)}}
+.reward-emoji{position:fixed;top:40%;left:50%;transform:translate(-50%,-50%);font-size:4rem;z-index:9999;pointer-events:none;animation:rewardPop 0.4s ease-out, rewardFade 0.6s 0.6s ease-out forwards}
+@keyframes shakeX{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.shake{animation:shakeX 0.4s ease}
+
 @media(max-width:760px){
   .layout{flex-direction:column}
   .side-col{width:100%}
@@ -283,6 +294,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 </div>
 
+<div class="timer-bar"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div>
+<div class="timer-label" id="timer-label">⏱️ 15s</div>
+
 <script src="vocab.js"></script>
 <script>
 // === State ===
@@ -301,6 +315,120 @@ let listFilter = 'all';
 let history = []; // word history stack
 let activeLevel = 'all';
 let wrongRepeat = {}; // session-level: track how many times a wrong word has been re-shown
+let timerInterval = null;
+let timerStart = 0;
+const TIMER_SECONDS = 15;
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+// === Sound Effects (Web Audio API) ===
+function playCorrectSound() {
+  // Happy ascending chime 🎵
+  const now = audioCtx.currentTime;
+  [523, 659, 784, 1047].forEach((freq, i) => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.3, now + i * 0.1);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.1 + 0.3);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(now + i * 0.1);
+    osc.stop(now + i * 0.1 + 0.3);
+  });
+}
+
+function playWrongSound() {
+  // Buzzer descending 😵
+  const now = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = 'square';
+  osc.frequency.setValueAtTime(300, now);
+  osc.frequency.linearRampToValueAtTime(150, now + 0.3);
+  gain.gain.setValueAtTime(0.2, now);
+  gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  osc.start(now); osc.stop(now + 0.4);
+}
+
+function playTimeUpSound() {
+  // Urgent double beep ⏰
+  const now = audioCtx.currentTime;
+  [0, 0.15].forEach(d => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'triangle'; osc.frequency.value = 880;
+    gain.gain.setValueAtTime(0.25, now + d);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + d + 0.12);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(now + d); osc.stop(now + d + 0.12);
+  });
+}
+
+// === Reward emoji pop ===
+function showRewardEmoji(correct) {
+  const el = document.createElement('div');
+  el.className = 'reward-emoji';
+  el.textContent = correct ? ['🎉','⭐','🔥','💪','👏','🌟'][Math.floor(Math.random()*6)] : ['😢','💔','🙈'][Math.floor(Math.random()*3)];
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1300);
+}
+
+// === Timer ===
+function startTimer() {
+  stopTimer();
+  if (currentMode === 'list' || currentMode === 'wrong') return;
+  timerStart = Date.now();
+  const fill = document.getElementById('timer-fill');
+  const label = document.getElementById('timer-label');
+  fill.style.width = '100%';
+  timerInterval = setInterval(() => {
+    const elapsed = (Date.now() - timerStart) / 1000;
+    const remaining = Math.max(0, TIMER_SECONDS - elapsed);
+    const pct = (remaining / TIMER_SECONDS) * 100;
+    fill.style.width = pct + '%';
+    label.textContent = '⏱️ ' + Math.ceil(remaining) + 's';
+    if (remaining <= 0) {
+      stopTimer();
+      handleTimeUp();
+    }
+  }, 100);
+}
+
+function stopTimer() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+}
+
+function handleTimeUp() {
+  if (!currentWord) return;
+  playTimeUpSound();
+  if (currentMode === 'spell' && !spellChecked) {
+    document.getElementById('spell-feedback').innerHTML = '<span class="wrong">⏰ Time up! 时间到! Answer: ' + currentWord.w + '</span>';
+    document.getElementById('spell-input').className = 'wrong';
+    addToWrongBook(currentWord);
+    const s = ws(currentWord.w); s.att++; s.t = Date.now();
+    saveState(); updateStats();
+    document.querySelector('.main-col .card')?.classList.add('shake');
+    setTimeout(() => document.querySelector('.main-col .card')?.classList.remove('shake'), 500);
+    setTimeout(loadSpell, 2000);
+  } else if (currentMode === 'match' && !answered) {
+    answered = true;
+    document.getElementById('match-feedback').innerHTML = '<span class="wrong">⏰ Time up! Answer: ' + currentWord.w + '</span>';
+    document.querySelectorAll('#match-options .option').forEach(o => { o.classList.add('disabled'); if(o.textContent===currentWord.w) o.classList.add('correct'); });
+    addToWrongBook(currentWord);
+    const s = ws(currentWord.w); s.att++; s.t = Date.now();
+    saveState(); updateStats();
+    document.getElementById('match-next').style.display = 'inline-block';
+  } else if (currentMode === 'quiz' && !answered) {
+    answered = true;
+    document.getElementById('quiz-feedback').innerHTML = '<span class="wrong">⏰ Time up! Answer: ' + enDef(currentWord) + ' / ' + currentWord.m + '</span>';
+    document.querySelectorAll('#quiz-options .option').forEach(o => { o.classList.add('disabled'); if(o.querySelector('.opt-en')?.textContent===enDef(currentWord)) o.classList.add('correct'); });
+    addToWrongBook(currentWord);
+    const s = ws(currentWord.w); s.att++; s.t = Date.now();
+    saveState(); updateStats();
+    document.getElementById('quiz-next').style.display = 'inline-block';
+  }
+}
 
 function getFilteredVocab() {
   if (activeLevel === 'all') return VOCAB;
@@ -533,6 +661,7 @@ function loadSpell() {
   document.getElementById('spell-feedback').innerHTML = '';
   document.getElementById('spell-reveal').innerHTML = '';
   document.getElementById('spell-input').focus();
+  startTimer();
 }
 
 function checkSpelling() {
@@ -543,9 +672,11 @@ function checkSpelling() {
   spellChecked = true;
 
   if (inp === correct) {
+    stopTimer();
     s.sp++;
     document.getElementById('spell-input').className = 'correct';
     document.getElementById('spell-feedback').innerHTML = '<span class="correct">✅ Correct! 正确!</span>';
+    playCorrectSound(); showRewardEmoji(true);
     speak(currentWord.w, 'en-US');
     saveState(); updateStats();
     setTimeout(loadSpell, 1500);
@@ -553,7 +684,10 @@ function checkSpelling() {
     s.sp = Math.max(0, s.sp - 1);
     document.getElementById('spell-input').className = 'wrong';
     document.getElementById('spell-feedback').innerHTML = `<span class="wrong">❌ Try again! 再试一次! (Answer: ${currentWord.w})</span>`;
-    addToWrongBook(currentWord); // add to wrong book on first wrong attempt
+    playWrongSound(); showRewardEmoji(false);
+    document.querySelector('.main-col .card')?.classList.add('shake');
+    setTimeout(() => document.querySelector('.main-col .card')?.classList.remove('shake'), 500);
+    addToWrongBook(currentWord);
     saveState(); updateStats();
   }
 }
@@ -593,6 +727,7 @@ function loadMatch() {
   document.getElementById('match-feedback').innerHTML = '';
   document.getElementById('match-next').style.display = 'none';
   autoSpeak();
+  startTimer();
 
   const correctW = currentWord.w;
   const wrongs = [];
@@ -646,13 +781,16 @@ function selectMatch(btn, selected, correct) {
   answered = true;
   document.querySelectorAll('#match-options .option').forEach(o => o.classList.add('disabled'));
   const s = ws(currentWord.w); s.att++; s.t = Date.now();
+  stopTimer();
   if (selected === correct) {
     s.ma++; btn.classList.add('correct');
     document.getElementById('match-feedback').innerHTML = '<span class="correct">✅ Correct! 正确!</span>';
+    playCorrectSound(); showRewardEmoji(true);
   } else {
     s.ma = Math.max(0, s.ma-1); btn.classList.add('wrong');
     document.querySelectorAll('#match-options .option').forEach(o => { if(o.textContent===correct) o.classList.add('correct'); });
     document.getElementById('match-feedback').innerHTML = `<span class="wrong">❌ Answer: <strong>${correct}</strong></span>`;
+    playWrongSound(); showRewardEmoji(false);
     addToWrongBook(currentWord);
   }
   saveState(); updateStats();
@@ -670,6 +808,7 @@ function loadQuiz() {
   document.getElementById('quiz-feedback').innerHTML = '';
   document.getElementById('quiz-next').style.display = 'none';
   autoSpeak();
+  startTimer();
 
   const correctM = currentWord.m, correctE = enDef(currentWord);
   const wrongs = [];
@@ -722,15 +861,18 @@ function selectQuiz(btn, isCorrect, correctE, correctM) {
   answered = true;
   document.querySelectorAll('#quiz-options .option').forEach(o => o.classList.add('disabled'));
   const s = ws(currentWord.w); s.att++; s.t = Date.now();
+  stopTimer();
   if (isCorrect) {
     s.qu++; btn.classList.add('correct');
     document.getElementById('quiz-feedback').innerHTML = '<span class="correct">✅ Correct! 正确!</span>';
+    playCorrectSound(); showRewardEmoji(true);
   } else {
     s.qu = Math.max(0, s.qu-1); btn.classList.add('wrong');
     document.querySelectorAll('#quiz-options .option').forEach(o => {
       if (o.querySelector('.opt-en').textContent === correctE) o.classList.add('correct');
     });
     document.getElementById('quiz-feedback').innerHTML = `<span class="wrong">❌ Answer: ${correctE} / ${correctM}</span>`;
+    playWrongSound(); showRewardEmoji(false);
     addToWrongBook(currentWord);
   }
   saveState(); updateStats();
@@ -832,6 +974,7 @@ function switchModeByName(mode) {
 
 function switchMode(mode) {
   currentMode = mode;
+  if (mode === 'list' || mode === 'wrong') { stopTimer(); document.getElementById('timer-fill').style.width = '100%'; document.getElementById('timer-label').textContent = '⏱️ --'; }
   document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
   event.target.classList.add('active');
   ['spell','match','quiz','list','wrong'].forEach(m => {
