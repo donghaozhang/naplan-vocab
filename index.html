@@ -196,6 +196,24 @@ body{font-family:'Nunito',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif
 .game-over-card .go-stats strong{font-size:1.3rem;color:var(--primary)}
 .game-over-card .go-stats .go-score{font-size:1.5rem;color:var(--gold);font-weight:900}
 
+/* === MASCOT === */
+.mascot-container{position:fixed;bottom:60px;right:20px;z-index:9990;display:flex;flex-direction:column;align-items:center;pointer-events:none}
+.mascot-bubble{background:#fff;border-radius:16px;padding:8px 14px;font-size:0.85rem;font-weight:700;color:var(--text);box-shadow:0 2px 12px rgba(0,0,0,0.12);border:2px solid var(--border);position:relative;margin-bottom:8px;opacity:0;transform:translateY(8px) scale(0.8);transition:opacity 0.3s,transform 0.3s;white-space:nowrap;max-width:180px;text-align:center}
+.mascot-bubble.show{opacity:1;transform:translateY(0) scale(1)}
+.mascot-bubble::after{content:'';position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:8px solid #fff}
+.mascot-bubble::before{content:'';position:absolute;bottom:-11px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-top:9px solid var(--border)}
+.mascot-emoji{font-size:4rem;line-height:1;transition:transform 0.3s}
+.mascot-glow{display:none;position:absolute;width:90px;height:90px;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.mascot-emoji-wrap{position:relative;display:inline-block}
+@keyframes mascotBounce{0%,100%{transform:translateY(0)}30%{transform:translateY(-18px)}50%{transform:translateY(-10px)}70%{transform:translateY(-14px)}}
+@keyframes mascotShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px) rotate(-5deg)}40%{transform:translateX(5px) rotate(5deg)}60%{transform:translateX(-3px) rotate(-3deg)}80%{transform:translateX(3px) rotate(3deg)}}
+@keyframes mascotPanic{0%,100%{transform:scale(1)}25%{transform:scale(1.1) rotate(-3deg)}50%{transform:scale(0.95) rotate(3deg)}75%{transform:scale(1.05) rotate(-2deg)}}
+.mascot-bounce .mascot-emoji{animation:mascotBounce 0.6s ease}
+.mascot-shake .mascot-emoji{animation:mascotShake 0.5s ease}
+.mascot-panic .mascot-emoji{animation:mascotPanic 0.5s ease 2}
+@keyframes ssj-glow{0%,100%{box-shadow:0 0 15px 5px rgba(255,215,0,0.6)}50%{box-shadow:0 0 30px 10px rgba(255,215,0,0.9)}}
+.mascot-ssj .mascot-glow{display:block;background:radial-gradient(circle,rgba(255,215,0,0.4),transparent 70%);animation:ssj-glow 1s ease infinite}
+
 @media(max-width:760px){
   .layout{flex-direction:column}
   .side-col{width:100%}
@@ -205,6 +223,9 @@ body{font-family:'Nunito',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif
   .clue-chinese{font-size:1.3rem}
   .quiz-word{font-size:1.8rem}
   .nav button{padding:8px 14px;font-size:0.75rem}
+  .mascot-container{bottom:50px;right:10px}
+  .mascot-emoji{font-size:3rem}
+  .mascot-bubble{font-size:0.75rem;padding:6px 10px;max-width:140px}
 }
 </style>
 </head>
@@ -365,11 +386,83 @@ body{font-family:'Nunito',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif
 
 </div>
 
+<div class="mascot-container" id="mascot-container">
+  <div class="mascot-bubble" id="mascot-bubble"></div>
+  <div class="mascot-emoji-wrap">
+    <div class="mascot-glow" id="mascot-glow"></div>
+    <div class="mascot-emoji" id="mascot-emoji">🐱</div>
+  </div>
+</div>
+
 <div class="timer-bar"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div>
 <div class="timer-label" id="timer-label">⏱️ 15s</div>
 
 <script src="vocab.js"></script>
 <script>
+// === MASCOT SYSTEM ===
+const mascotEl = document.getElementById('mascot-emoji');
+const mascotBubble = document.getElementById('mascot-bubble');
+const mascotContainer = document.getElementById('mascot-container');
+let mascotBubbleTimer = null;
+
+const MASCOT_CORRECT_EMOJIS = ['🥳','😆','🤩','😎','👏','🎉'];
+const MASCOT_WRONG_EMOJIS = ['😢','😭','🥺','😿','💔'];
+const MASCOT_TIMEOUT_EMOJIS = ['😱','⏰','😰'];
+const MASCOT_CORRECT_MSGS = ['Great!','Amazing!','你太棒了!','Awesome!','继续加油!','Perfect!','Well done!','厉害!','Excellent!','Super!'];
+const MASCOT_WRONG_MSGS = ['没关系!','Try again!','加油!','You can do it!','别灰心!','Keep going!','Almost!','下次一定行!'];
+const MASCOT_TIMEOUT_MSGS = ['太慢了!','Hurry!','快快快!','Time\'s up!','要加速哦!'];
+
+function mascotRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function mascotShowBubble(text) {
+  if (mascotBubbleTimer) clearTimeout(mascotBubbleTimer);
+  mascotBubble.textContent = text;
+  mascotBubble.classList.add('show');
+  mascotBubbleTimer = setTimeout(() => mascotBubble.classList.remove('show'), 2000);
+}
+
+function mascotAnimate(type) {
+  mascotContainer.classList.remove('mascot-bounce','mascot-shake','mascot-panic','mascot-ssj');
+  // Force reflow for re-triggering animation
+  void mascotContainer.offsetWidth;
+  mascotContainer.classList.add('mascot-' + type);
+}
+
+function mascotReact(result) {
+  if (result === 'correct') {
+    mascotEl.textContent = mascotRandom(MASCOT_CORRECT_EMOJIS);
+    mascotShowBubble(mascotRandom(MASCOT_CORRECT_MSGS));
+    mascotAnimate('bounce');
+  } else if (result === 'wrong') {
+    mascotEl.textContent = mascotRandom(MASCOT_WRONG_EMOJIS);
+    mascotShowBubble(mascotRandom(MASCOT_WRONG_MSGS));
+    mascotAnimate('shake');
+  } else if (result === 'timeout') {
+    mascotEl.textContent = mascotRandom(MASCOT_TIMEOUT_EMOJIS);
+    mascotShowBubble(mascotRandom(MASCOT_TIMEOUT_MSGS));
+    mascotAnimate('panic');
+  }
+  // Reset to neutral after delay
+  setTimeout(mascotUpdateCombo, 2500);
+}
+
+function mascotUpdateCombo() {
+  const glow = document.getElementById('mascot-glow');
+  mascotContainer.classList.remove('mascot-ssj');
+  glow.style.display = 'none';
+  if (gameStreak >= 10) {
+    mascotEl.textContent = '😎';
+    mascotContainer.classList.add('mascot-ssj');
+    glow.style.display = 'block';
+  } else if (gameStreak >= 5) {
+    mascotEl.textContent = '🔥😎🔥';
+  } else if (gameStreak >= 3) {
+    mascotEl.textContent = '😎';
+  } else {
+    mascotEl.textContent = '🐱';
+  }
+}
+
 // === State ===
 const STORAGE_KEY = 'naplan-vocab-v2';
 const WRONG_KEY = 'naplan-wrong-v1';
@@ -447,10 +540,14 @@ function addScore(isCorrect) {
   updateScoreUI(); updateComboUI(); updateFireBorder();
   showFlash('green'); showStarParticles();
   gainHeart();
+  mascotReact('correct');
 }
 
+let _mascotReacted = false;
 function onWrongAnswer() {
   loseHeart();
+  if (!_mascotReacted) mascotReact('wrong');
+  _mascotReacted = false;
 }
 
 function updateScoreUI() {
@@ -466,6 +563,7 @@ function updateComboUI() {
     el.textContent = '';
     el.classList.remove('hot');
   }
+  if (typeof mascotUpdateCombo === 'function') mascotUpdateCombo();
 }
 
 function updateFireBorder() {
@@ -650,6 +748,8 @@ function stopTimer() {
 function handleTimeUp() {
   if (!currentWord) return;
   playTimeUpSound();
+  mascotReact('timeout');
+  _mascotReacted = true;
   if (currentMode === 'spell' && !spellChecked) {
     document.getElementById('spell-feedback').innerHTML = '<span class="wrong">⏰ Time up! 时间到! Answer: ' + currentWord.w + '</span>';
     document.getElementById('spell-input').className = 'wrong';
