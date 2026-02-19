@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NAPLAN Year 3 Vocabulary å•è¯å­¦ä¹ </title>
+<title>NAPLAN Year 3 Vocabulary 单词学习</title>
 <style>
 :root{--bg:#f0f4f8;--card:#fff;--primary:#3b82f6;--primary-dark:#2563eb;--success:#22c55e;--danger:#ef4444;--warning:#f59e0b;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--radius:16px}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -141,32 +141,32 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <body>
 
 <div class="header">
-  <h1>ðŸ“š NAPLAN Vocabulary å•è¯å­¦ä¹ </h1>
-  <p>Official NAPLAN Spelling Reference Â· 1198 Words Â· 4 Levels</p>
+  <h1>📚 NAPLAN Vocabulary 单词学习</h1>
+  <p>Official NAPLAN Spelling Reference · 1198 Words · 4 Levels</p>
 </div>
 
 <div class="level-bar">
-  <button class="level-btn active" data-level="all" onclick="setLevel('all',this)">ðŸŒŸ All å…¨éƒ¨</button>
-  <button class="level-btn" data-level="simple" onclick="setLevel('simple',this)">ðŸŸ¢ Simple ç®€å•</button>
-  <button class="level-btn" data-level="common" onclick="setLevel('common',this)">ðŸ”µ Common å¸¸è§</button>
-  <button class="level-btn" data-level="difficult" onclick="setLevel('difficult',this)">ðŸŸ  Difficult è¾ƒéš¾</button>
-  <button class="level-btn" data-level="challenging" onclick="setLevel('challenging',this)">ðŸ”´ Challenging æŒ‘æˆ˜</button>
+  <button class="level-btn active" data-level="all" onclick="setLevel('all',this)">🌟 All 全部</button>
+  <button class="level-btn" data-level="simple" onclick="setLevel('simple',this)">🟢 Simple 简单</button>
+  <button class="level-btn" data-level="common" onclick="setLevel('common',this)">🔵 Common 常见</button>
+  <button class="level-btn" data-level="difficult" onclick="setLevel('difficult',this)">🟠 Difficult 较难</button>
+  <button class="level-btn" data-level="challenging" onclick="setLevel('challenging',this)">🔴 Challenging 挑战</button>
 </div>
 
 <div class="stats-bar">
-  <div class="stat"><div class="stat-num green" id="s-mastered">0</div><div class="stat-label">Mastered âœ…</div></div>
-  <div class="stat"><div class="stat-num orange" id="s-learning">0</div><div class="stat-label">Learning ðŸ“</div></div>
-  <div class="stat"><div class="stat-num" id="s-new">0</div><div class="stat-label">New ðŸ†•</div></div>
-  <div class="stat"><div class="stat-num red" id="s-wrong">0</div><div class="stat-label">Wrong âŒ</div></div>
+  <div class="stat"><div class="stat-num green" id="s-mastered">0</div><div class="stat-label">Mastered ✅</div></div>
+  <div class="stat"><div class="stat-num orange" id="s-learning">0</div><div class="stat-label">Learning 📝</div></div>
+  <div class="stat"><div class="stat-num" id="s-new">0</div><div class="stat-label">New 🆕</div></div>
+  <div class="stat"><div class="stat-num red" id="s-wrong">0</div><div class="stat-label">Wrong ❌</div></div>
   <div class="stat"><div class="stat-num" id="s-total">0</div><div class="stat-label">Total</div></div>
 </div>
 
 <div class="nav">
-  <button class="active" onclick="switchMode('spell')">âœï¸ Spell æ‹¼å†™</button>
-  <button onclick="switchMode('match')">ðŸ”¤ Match é…å¯¹</button>
-  <button onclick="switchMode('quiz')">ðŸŽ¯ Quiz è¯ä¹‰</button>
-  <button onclick="switchMode('list')">ðŸ“‹ List è¯è¡¨</button>
-  <button onclick="switchMode('wrong')">âŒ Wrong é”™é¢˜æœ¬</button>
+  <button class="active" onclick="switchMode('spell')">✏️ Spell 拼写</button>
+  <button onclick="switchMode('match')">🔤 Match 配对</button>
+  <button onclick="switchMode('quiz')">🎯 Quiz 词义</button>
+  <button onclick="switchMode('list')">📋 List 词表</button>
+  <button onclick="switchMode('wrong')">❌ Wrong 错题本</button>
 </div>
 
 <div class="layout">
@@ -175,9 +175,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <!-- SPELL MODE -->
   <div id="mode-spell">
     <div class="card">
-      <h2>âœï¸ Spell the Word æ‹¼å†™å•è¯</h2>
-      <div class="subtitle">Read the meaning, then type the word Â· çœ‹é‡Šä¹‰ï¼Œæ‹¼å‡ºå•è¯</div>
-      <div class="auto-speak"><label><input type="checkbox" id="auto-speak" checked> ðŸ”Š Auto-play sound è‡ªåŠ¨è¯»éŸ³</label></div>
+      <h2>✏️ Spell the Word 拼写单词</h2>
+      <div class="subtitle">Read the meaning, then type the word · 看释义,拼出单词</div>
+      <div class="auto-speak"><label><input type="checkbox" id="auto-speak" checked> 🔊 Auto-play sound 自动读音</label></div>
       <div class="clue-box">
         <div class="clue-english" id="spell-en"></div>
         <div class="clue-chinese" id="spell-cn"></div>
@@ -189,12 +189,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="feedback" id="spell-feedback"></div>
       <div class="reveal-area" id="spell-reveal"></div>
       <div class="btn-row">
-        <button class="btn btn-warning" onclick="goBack()">â† Back è¿”å›ž</button>
-        <button class="btn btn-primary" onclick="checkSpelling()">Check âœ“</button>
-        <button class="btn btn-outline" onclick="showHint()">Hint ðŸ’¡</button>
-        <button class="btn btn-outline" onclick="speakWord()">ðŸ”Š Listen</button>
-        <button class="btn btn-outline" onclick="revealAnswer()">Show ðŸ‘€</button>
-        <button class="btn btn-success" onclick="nextSpell()">Next â†’</button>
+        <button class="btn btn-warning" onclick="goBack()">← Back 返回</button>
+        <button class="btn btn-primary" onclick="checkSpelling()">Check ✓</button>
+        <button class="btn btn-outline" onclick="showHint()">Hint 💡</button>
+        <button class="btn btn-outline" onclick="speakWord()">🔊 Listen</button>
+        <button class="btn btn-outline" onclick="revealAnswer()">Show 👀</button>
+        <button class="btn btn-success" onclick="nextSpell()">Next →</button>
       </div>
       <div class="progress-bar"><div class="progress-fill" id="progress-bar"></div></div>
     </div>
@@ -203,8 +203,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <!-- MATCH MODE -->
   <div id="mode-match" style="display:none">
     <div class="card">
-      <h2>ðŸ”¤ Pick the Word é€‰å•è¯</h2>
-      <div class="subtitle">Read the meaning, pick the correct word Â· çœ‹é‡Šä¹‰ï¼Œé€‰æ­£ç¡®å•è¯</div>
+      <h2>🔤 Pick the Word 选单词</h2>
+      <div class="subtitle">Read the meaning, pick the correct word · 看释义,选正确单词</div>
       <div class="clue-box">
         <div class="clue-english" id="match-en"></div>
         <div class="clue-chinese" id="match-cn"></div>
@@ -212,9 +212,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="options options-words" id="match-options"></div>
       <div class="feedback" id="match-feedback"></div>
       <div class="btn-row">
-        <button class="btn btn-warning" onclick="goBack()">â† Back è¿”å›ž</button>
-        <button class="btn btn-outline" onclick="speakWord()">ðŸ”Š Listen</button>
-        <button class="btn btn-success" id="match-next" onclick="nextMatch()" style="display:none">Next â†’</button>
+        <button class="btn btn-warning" onclick="goBack()">← Back 返回</button>
+        <button class="btn btn-outline" onclick="speakWord()">🔊 Listen</button>
+        <button class="btn btn-success" id="match-next" onclick="nextMatch()" style="display:none">Next →</button>
       </div>
       <div class="progress-bar"><div class="progress-fill" id="progress-bar2"></div></div>
     </div>
@@ -223,15 +223,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <!-- QUIZ MODE -->
   <div id="mode-quiz" style="display:none">
     <div class="card">
-      <h2>ðŸŽ¯ What Does It Mean? ä»€ä¹ˆæ„æ€ï¼Ÿ</h2>
-      <div class="subtitle">See the word, pick the correct meaning Â· çœ‹å•è¯ï¼Œé€‰æ­£ç¡®é‡Šä¹‰</div>
+      <h2>🎯 What Does It Mean? 什么意思?</h2>
+      <div class="subtitle">See the word, pick the correct meaning · 看单词,选正确释义</div>
       <div class="quiz-word" id="quiz-word"></div>
-      <button class="speak-btn" onclick="speakWord()" title="Listen">ðŸ”Š</button>
+      <button class="speak-btn" onclick="speakWord()" title="Listen">🔊</button>
       <div class="options" id="quiz-options"></div>
       <div class="feedback" id="quiz-feedback"></div>
       <div class="btn-row">
-        <button class="btn btn-warning" onclick="goBack()">â† Back è¿”å›ž</button>
-        <button class="btn btn-success" id="quiz-next" onclick="nextQuiz()" style="display:none">Next â†’</button>
+        <button class="btn btn-warning" onclick="goBack()">← Back 返回</button>
+        <button class="btn btn-success" id="quiz-next" onclick="nextQuiz()" style="display:none">Next →</button>
       </div>
       <div class="progress-bar"><div class="progress-fill" id="progress-bar3"></div></div>
     </div>
@@ -240,16 +240,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <!-- WORD LIST -->
   <div id="mode-list" style="display:none">
     <div class="card">
-      <h2>ðŸ“‹ Word List è¯æ±‡è¡¨</h2>
+      <h2>📋 Word List 词汇表</h2>
       <div class="filter-tabs">
-        <div class="filter-tab active" onclick="filterList('all',this)">All å…¨éƒ¨</div>
-        <div class="filter-tab" onclick="filterList('new',this)">ðŸ†• New</div>
-        <div class="filter-tab" onclick="filterList('learning',this)">ðŸ“ Learning</div>
-        <div class="filter-tab" onclick="filterList('mastered',this)">âœ… Mastered</div>
+        <div class="filter-tab active" onclick="filterList('all',this)">All 全部</div>
+        <div class="filter-tab" onclick="filterList('new',this)">🆕 New</div>
+        <div class="filter-tab" onclick="filterList('learning',this)">📝 Learning</div>
+        <div class="filter-tab" onclick="filterList('mastered',this)">✅ Mastered</div>
       </div>
       <div class="word-list" id="word-list"></div>
       <div class="reset-section">
-        <button class="btn btn-danger btn-small" onclick="resetProgress()">ðŸ”„ Reset All Progress é‡ç½®è¿›åº¦</button>
+        <button class="btn btn-danger btn-small" onclick="resetProgress()">🔄 Reset All Progress 重置进度</button>
       </div>
     </div>
   </div>
@@ -257,12 +257,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <!-- WRONG BOOK (full page) -->
   <div id="mode-wrong" style="display:none">
     <div class="card">
-      <h2>âŒ Wrong Book é”™é¢˜æœ¬</h2>
-      <div class="subtitle">Words you got wrong Â· ç­”é”™çš„å•è¯</div>
+      <h2>❌ Wrong Book 错题本</h2>
+      <div class="subtitle">Words you got wrong · 答错的单词</div>
       <div id="wrong-full-list"></div>
       <div class="btn-row" style="margin-top:16px">
-        <button class="btn btn-danger btn-small" onclick="clearWrongBook()">ðŸ—‘ï¸ Clear All æ¸…ç©ºé”™é¢˜æœ¬</button>
-        <button class="btn btn-primary btn-small" onclick="practiceWrong()">ðŸ“ Practice Wrong Words ç»ƒé”™é¢˜</button>
+        <button class="btn btn-danger btn-small" onclick="clearWrongBook()">🗑️ Clear All 清空错题本</button>
+        <button class="btn btn-primary btn-small" onclick="practiceWrong()">📝 Practice Wrong Words 练错题</button>
       </div>
     </div>
   </div>
@@ -272,10 +272,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <!-- SIDEBAR: Wrong book (live) -->
 <div class="side-col">
   <div class="wrong-book" id="wrong-sidebar">
-    <h3>âŒ Wrong Book é”™é¢˜æœ¬ <span class="count" id="wrong-count">0</span></h3>
+    <h3>❌ Wrong Book 错题本 <span class="count" id="wrong-count">0</span></h3>
     <div class="wrong-list" id="wrong-list"></div>
     <div class="clear-btn">
-      <button class="btn btn-outline btn-small" onclick="clearWrongBook()">ðŸ—‘ï¸ Clear æ¸…ç©º</button>
+      <button class="btn btn-outline btn-small" onclick="clearWrongBook()">🗑️ Clear 清空</button>
     </div>
   </div>
 </div>
@@ -372,16 +372,16 @@ function renderWrongSidebar() {
   const entries = Object.entries(wrongBook).sort((a,b) => b[1].count - a[1].count);
   const container = document.getElementById('wrong-list');
   if (!entries.length) {
-    container.innerHTML = '<div class="wrong-empty">ðŸŽ‰ No wrong words!<br>æ²¡æœ‰é”™é¢˜ï¼</div>';
+    container.innerHTML = '<div class="wrong-empty">🎉 No wrong words!<br>没有错题!</div>';
     return;
   }
   let html = '';
   for (const [w, info] of entries) {
     html += `<div class="wrong-item">
-      <button class="speak-btn small" onclick="speak('${w}','en-US')">ðŸ”Š</button>
+      <button class="speak-btn small" onclick="speak('${w}','en-US')">🔊</button>
       <span class="wi-word">${w}</span>
-      <span class="wi-def">${info.e} Â· ${info.m}</span>
-      <span class="wi-count">Ã—${info.count}</span>
+      <span class="wi-def">${info.e} · ${info.m}</span>
+      <span class="wi-count">×${info.count}</span>
     </div>`;
   }
   container.innerHTML = html;
@@ -391,16 +391,16 @@ function renderWrongFullList() {
   const entries = Object.entries(wrongBook).sort((a,b) => b[1].count - a[1].count);
   const container = document.getElementById('wrong-full-list');
   if (!entries.length) {
-    container.innerHTML = '<div class="wrong-empty" style="padding:40px">ðŸŽ‰ Great job! No wrong words!<br>å¤ªæ£’äº†ï¼æ²¡æœ‰é”™é¢˜ï¼</div>';
+    container.innerHTML = '<div class="wrong-empty" style="padding:40px">🎉 Great job! No wrong words!<br>太棒了!没有错题!</div>';
     return;
   }
   let html = '<div class="word-list" style="max-height:500px">';
   for (const [w, info] of entries) {
     html += `<div class="word-item">
-      <button class="speak-btn small" onclick="speak('${w}','en-US')">ðŸ”Š</button>
+      <button class="speak-btn small" onclick="speak('${w}','en-US')">🔊</button>
       <div class="wi-left"><span class="eng" style="color:var(--danger)">${w}</span><br>
-      <span class="def">${info.e} Â· ${info.m}</span></div>
-      <span style="color:var(--danger);font-weight:700;font-size:0.85rem">Ã—${info.count}</span>
+      <span class="def">${info.e} · ${info.m}</span></div>
+      <span style="color:var(--danger);font-weight:700;font-size:0.85rem">×${info.count}</span>
     </div>`;
   }
   html += '</div>';
@@ -408,7 +408,7 @@ function renderWrongFullList() {
 }
 
 function clearWrongBook() {
-  if (confirm('Clear all wrong words? ç¡®å®šæ¸…ç©ºé”™é¢˜æœ¬ï¼Ÿ')) {
+  if (confirm('Clear all wrong words? 确定清空错题本?')) {
     wrongBook = {};
     saveWrongBook();
     updateStats();
@@ -418,7 +418,7 @@ function clearWrongBook() {
 
 function practiceWrong() {
   // Switch to spell mode but only with wrong words
-  alert('Tip: Wrong words are already prioritized in your practice!\næç¤ºï¼šé”™é¢˜å•è¯å·²ç»åœ¨ç»ƒä¹ ä¸­ä¼˜å…ˆå‡ºçŽ°äº†ï¼');
+  alert('Tip: Wrong words are already prioritized in your practice!\n提示:错题单词已经在练习中优先出现了!');
   switchModeByName('spell');
 }
 
@@ -480,7 +480,7 @@ function restoreSpell() {
   document.getElementById('spell-hint').textContent = `( ${currentWord.w.length} letters )`;
   document.getElementById('spell-input').value = '';
   document.getElementById('spell-input').className = '';
-  document.getElementById('spell-feedback').innerHTML = '<span style="color:var(--warning)">â¬…ï¸ Went back Â· å·²è¿”å›žä¸Šä¸€é¢˜</span>';
+  document.getElementById('spell-feedback').innerHTML = '<span style="color:var(--warning)">⬅️ Went back · 已返回上一题</span>';
   document.getElementById('spell-reveal').innerHTML = '';
   document.getElementById('spell-input').focus();
 }
@@ -511,14 +511,14 @@ function checkSpelling() {
   if (inp === correct) {
     s.sp++;
     document.getElementById('spell-input').className = 'correct';
-    document.getElementById('spell-feedback').innerHTML = '<span class="correct">âœ… Correct! æ­£ç¡®ï¼</span>';
+    document.getElementById('spell-feedback').innerHTML = '<span class="correct">✅ Correct! 正确!</span>';
     speak(currentWord.w, 'en-US');
     saveState(); updateStats();
     setTimeout(loadSpell, 1500);
   } else {
     s.sp = Math.max(0, s.sp - 1);
     document.getElementById('spell-input').className = 'wrong';
-    document.getElementById('spell-feedback').innerHTML = `<span class="wrong">âŒ Try again! å†è¯•ä¸€æ¬¡ï¼ (Answer: ${currentWord.w})</span>`;
+    document.getElementById('spell-feedback').innerHTML = `<span class="wrong">❌ Try again! 再试一次! (Answer: ${currentWord.w})</span>`;
     addToWrongBook(currentWord); // add to wrong book on first wrong attempt
     saveState(); updateStats();
   }
@@ -540,7 +540,7 @@ function revealAnswer() {
   document.getElementById('spell-reveal').innerHTML = `<span class="reveal-word">${currentWord.w}</span>`;
   speak(currentWord.w, 'en-US');
   if (!spellChecked) {
-    // User revealed without trying â€” counts as wrong
+    // User revealed without trying — counts as wrong
     addToWrongBook(currentWord);
   }
   const s = ws(currentWord.w); s.sp = Math.max(0, s.sp-1); s.att++; s.t = Date.now();
@@ -586,7 +586,7 @@ function restoreMatch() {
   answered = false;
   document.getElementById('match-en').textContent = enDef(currentWord);
   document.getElementById('match-cn').textContent = currentWord.m;
-  document.getElementById('match-feedback').innerHTML = '<span style="color:var(--warning)">â¬…ï¸ Went back Â· å·²è¿”å›žä¸Šä¸€é¢˜</span>';
+  document.getElementById('match-feedback').innerHTML = '<span style="color:var(--warning)">⬅️ Went back · 已返回上一题</span>';
   document.getElementById('match-next').style.display = 'none';
   const correctW = currentWord.w;
   const wrongs = [];
@@ -614,11 +614,11 @@ function selectMatch(btn, selected, correct) {
   const s = ws(currentWord.w); s.att++; s.t = Date.now();
   if (selected === correct) {
     s.ma++; btn.classList.add('correct');
-    document.getElementById('match-feedback').innerHTML = '<span class="correct">âœ… Correct! æ­£ç¡®ï¼</span>';
+    document.getElementById('match-feedback').innerHTML = '<span class="correct">✅ Correct! 正确!</span>';
   } else {
     s.ma = Math.max(0, s.ma-1); btn.classList.add('wrong');
     document.querySelectorAll('#match-options .option').forEach(o => { if(o.textContent===correct) o.classList.add('correct'); });
-    document.getElementById('match-feedback').innerHTML = `<span class="wrong">âŒ Answer: <strong>${correct}</strong></span>`;
+    document.getElementById('match-feedback').innerHTML = `<span class="wrong">❌ Answer: <strong>${correct}</strong></span>`;
     addToWrongBook(currentWord);
   }
   saveState(); updateStats();
@@ -661,7 +661,7 @@ function loadQuiz() {
 function restoreQuiz() {
   answered = false;
   document.getElementById('quiz-word').textContent = currentWord.w;
-  document.getElementById('quiz-feedback').innerHTML = '<span style="color:var(--warning)">â¬…ï¸ Went back Â· å·²è¿”å›žä¸Šä¸€é¢˜</span>';
+  document.getElementById('quiz-feedback').innerHTML = '<span style="color:var(--warning)">⬅️ Went back · 已返回上一题</span>';
   document.getElementById('quiz-next').style.display = 'none';
   const correctM = currentWord.m, correctE = enDef(currentWord);
   const wrongs = [];
@@ -690,13 +690,13 @@ function selectQuiz(btn, isCorrect, correctE, correctM) {
   const s = ws(currentWord.w); s.att++; s.t = Date.now();
   if (isCorrect) {
     s.qu++; btn.classList.add('correct');
-    document.getElementById('quiz-feedback').innerHTML = '<span class="correct">âœ… Correct! æ­£ç¡®ï¼</span>';
+    document.getElementById('quiz-feedback').innerHTML = '<span class="correct">✅ Correct! 正确!</span>';
   } else {
     s.qu = Math.max(0, s.qu-1); btn.classList.add('wrong');
     document.querySelectorAll('#quiz-options .option').forEach(o => {
       if (o.querySelector('.opt-en').textContent === correctE) o.classList.add('correct');
     });
-    document.getElementById('quiz-feedback').innerHTML = `<span class="wrong">âŒ Answer: ${correctE} / ${correctM}</span>`;
+    document.getElementById('quiz-feedback').innerHTML = `<span class="wrong">❌ Answer: ${correctE} / ${correctM}</span>`;
     addToWrongBook(currentWord);
   }
   saveState(); updateStats();
@@ -719,14 +719,14 @@ function renderList() {
     const st = getStatus(v.w);
     if (listFilter !== 'all' && st !== listFilter) continue;
     let bc, bt;
-    if (st==='mastered'){bc='badge-mastered';bt='âœ… Mastered';}
-    else if(st==='learning'){bc='badge-learning';bt='ðŸ“ Learning';}
-    else{bc='badge-new';bt='ðŸ†• New';}
-    const inWrong = wrongBook[v.w] ? `<span style="color:var(--danger);font-size:0.7rem"> Ã—${wrongBook[v.w].count}</span>` : '';
+    if (st==='mastered'){bc='badge-mastered';bt='✅ Mastered';}
+    else if(st==='learning'){bc='badge-learning';bt='📝 Learning';}
+    else{bc='badge-new';bt='🆕 New';}
+    const inWrong = wrongBook[v.w] ? `<span style="color:var(--danger);font-size:0.7rem"> ×${wrongBook[v.w].count}</span>` : '';
     html += `<div class="word-item">
-      <button class="speak-btn small" onclick="speak('${v.w}','en-US')">ðŸ”Š</button>
+      <button class="speak-btn small" onclick="speak('${v.w}','en-US')">🔊</button>
       <div class="wi-left"><span class="eng">${v.w}</span>${levelBadge(v)}${inWrong}<br>
-      <span class="def">${enDef(v)} Â· ${v.m}</span></div>
+      <span class="def">${enDef(v)} · ${v.m}</span></div>
       <span class="badge ${bc}">${bt}</span></div>`;
   }
   if(!html) html = '<div style="padding:20px;text-align:center;color:var(--muted)">No words found</div>';
@@ -741,7 +741,7 @@ function filterList(f, el) {
 }
 
 function resetProgress() {
-  if (confirm('Reset ALL progress? ç¡®å®šé‡ç½®æ‰€æœ‰è¿›åº¦ï¼Ÿ')) {
+  if (confirm('Reset ALL progress? 确定重置所有进度?')) {
     state = {}; wrongBook = {};
     saveState(); saveWrongBook(); updateStats(); init();
   }
